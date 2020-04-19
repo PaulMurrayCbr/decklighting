@@ -6,10 +6,11 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>   // Include the WebServer library
-
 #include <Esp.h>
+#include <Wire.h>
 
 #include "passwords.h"
+#include "RTC.h"
 
 ESP8266WebServer server(80);    // Create a webserver object that listens for HTTP request on port 80
 
@@ -20,6 +21,9 @@ class State {
     int a;
 }
 state;
+
+TwoWire softwire;
+RTC rtc(softwire);
 
 void setup() {
 
@@ -60,6 +64,21 @@ void setup() {
 
   server.begin();                           // Actually start the server
   Serial.println("HTTP server started");
+
+  softwire.begin(D4, D3);
+
+  Serial.println("hey, I wonder if the twowire works?");
+  delay(3000);
+  rtc.begin();
+  Serial.println(rtc.isrunning());
+  DateTime dt = rtc.now();
+  Serial.println(dt.year());
+  Serial.println(dt.month());
+  Serial.println(dt.day());
+  Serial.println(dt.hour());
+  Serial.println(dt.minute());
+  Serial.println(dt.second());
+
 }
 
 void loop(void) {
@@ -73,9 +92,16 @@ void handleState() {
 
   char json[256];
 
+  DateTime dt = rtc.now();
+
   snprintf(json, sizeof(json),
-           "{ \"a\": %d, \"millis\": %ld }" ,
-           state.a, millis()
+           "{ \"a\": %d, \"millis\": %ld, \"dt\": { "
+           "\"y\": %d, \"m\": %d, \"d\": %d,"
+           "\"hh\": %d, \"mm\": %d, \"ss\": %d"
+           " } }" ,
+           state.a, millis(),
+           dt.year(), dt.month(), dt.day(),
+           dt.hour(), dt.minute(), dt.second()
           );
 
   server.sendHeader("Access-Control-Allow-Origin", "*");
