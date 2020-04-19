@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="jquery-3.5.0.min.js"></script>
+
+<script type="text/javascript">
+	var deck = "http://192.168.0.14";
+	var deckstate = deck + "/state";
+
+	function fetchState() {
+		$("#state").html("Fetching state &hellip;");
+		$.getJSON(deckstate)
+		.done(function(data) {
+			$("#state").html("ok " + JSON.stringify(data));
+		})
+		,fail(function(result){
+			$("#state").html("fail " + JSON.stringify(result));
+		});
+	}
+
+	$(document).ready(fetchState);
+</script>
+
+</head>
+<body>
+
+	<button onclick="fetchState()">Fetch State</button>
+
+	<div id="state"></div>
+
+</body>
+</html>
