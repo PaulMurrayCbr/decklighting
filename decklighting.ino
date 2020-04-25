@@ -67,7 +67,6 @@ void setup() {
 
   softwire.begin(D4, D3);
 
-  Serial.println("hey, I wonder if the twowire works?");
   delay(3000);
   DateTime2 dt;
   rtc.get(dt);
@@ -84,13 +83,13 @@ void setup() {
   Serial.println(dt.year_s);      /* year in short notation*/
 
   DateTime2 set;
-  set.sec = 3;
-  set.min = 5;
-  set.hour = 12;
+  set.sec = 0;
+  set.min = 19;
+  set.hour = 13;
   set.mday = 25;
-  set.mon = 4;
-  set.year = 20;
-  set.wday = 4;  
+  set.mon = 4; // apr
+  set.year = 2020;
+  set.wday = 6; // today is saturday
   rtc.set(set);
 
   rtc.get(dt);
@@ -106,7 +105,6 @@ void setup() {
   Serial.println(dt.isdst);       /* daylight saving time */
   Serial.println(dt.year_s);      /* year in short notation*/
 
-  
 }
 
 void loop(void) {
