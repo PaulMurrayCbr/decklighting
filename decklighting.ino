@@ -10,7 +10,7 @@
 #include <Wire.h>
 
 #include "passwords.h"
-#include "RTC.h"
+#include "RTC2.h"
 
 ESP8266WebServer server(80);    // Create a webserver object that listens for HTTP request on port 80
 
@@ -23,7 +23,7 @@ class State {
 state;
 
 TwoWire softwire;
-RTC rtc(softwire);
+RTC2 rtc(softwire);
 
 void setup() {
 
@@ -69,16 +69,44 @@ void setup() {
 
   Serial.println("hey, I wonder if the twowire works?");
   delay(3000);
-  rtc.begin();
-  Serial.println(rtc.isrunning());
-  DateTime dt = rtc.now();
-  Serial.println(dt.year());
-  Serial.println(dt.month());
-  Serial.println(dt.day());
-  Serial.println(dt.hour());
-  Serial.println(dt.minute());
-  Serial.println(dt.second());
+  DateTime2 dt;
+  rtc.get(dt);
 
+  Serial.println(dt.sec);         /* seconds */
+  Serial.println(dt.min);         /* minutes */
+  Serial.println(dt.hour);        /* hours */
+  Serial.println(dt.mday);        /* day of the month */
+  Serial.println(dt.mon);         /* month */
+  Serial.println(dt.year);        /* year */
+  Serial.println(dt.wday);        /* day of the week */
+  Serial.println(dt.yday);        /* day in the year */
+  Serial.println(dt.isdst);       /* daylight saving time */
+  Serial.println(dt.year_s);      /* year in short notation*/
+
+  DateTime2 set;
+  set.sec = 3;
+  set.min = 5;
+  set.hour = 12;
+  set.mday = 25;
+  set.mon = 4;
+  set.year = 20;
+  set.wday = 4;  
+  rtc.set(set);
+
+  rtc.get(dt);
+
+  Serial.println(dt.sec);         /* seconds */
+  Serial.println(dt.min);         /* minutes */
+  Serial.println(dt.hour);        /* hours */
+  Serial.println(dt.mday);        /* day of the month */
+  Serial.println(dt.mon);         /* month */
+  Serial.println(dt.year);        /* year */
+  Serial.println(dt.wday);        /* day of the week */
+  Serial.println(dt.yday);        /* day in the year */
+  Serial.println(dt.isdst);       /* daylight saving time */
+  Serial.println(dt.year_s);      /* year in short notation*/
+
+  
 }
 
 void loop(void) {
@@ -92,16 +120,33 @@ void handleState() {
 
   char json[256];
 
-  DateTime dt = rtc.now();
+  DateTime2 dt;
+  rtc.get(dt);
 
   snprintf(json, sizeof(json),
-           "{ \"a\": %d, \"millis\": %ld, \"dt\": { "
-           "\"y\": %d, \"m\": %d, \"d\": %d,"
-           "\"hh\": %d, \"mm\": %d, \"ss\": %d"
-           " } }" ,
-           state.a, millis(),
-           dt.year(), dt.month(), dt.day(),
-           dt.hour(), dt.minute(), dt.second()
+           "{\n\t\"a\": %d, \n\t\"millis\": %ld, \n\t\"dt\": { "
+           "\n\t\t\"sec\": %d, "
+           "\n\t\t\"min\": %d, "
+           "\n\t\t\"hour\": %d, "
+           "\n\t\t\"day\": %d, "
+           "\n\t\t\"mday\": %d, "
+           "\n\t\t\"mon\": %d, "
+           "\n\t\t\"year\": %d, "
+           "\n\t\t\"wday\": %d, "
+           "\n\t\t\"isdst\": %d, "
+           "\n\t\t\"year_s\": %d "
+           "\n\t}\n}" ,
+           state.a, millis(), //
+           dt.sec ,        //* seconds */
+           dt.min  ,      //* minutes */
+           dt.hour  ,      //* hours */
+           dt.mday  ,      //* day of the month */
+           dt.mon    ,     //* month */
+           dt.year    ,    //* year */
+           dt.wday     ,   //* day of the week */
+           dt.yday      ,  //* day in the year */
+           dt.isdst      , //* daylight saving time */
+           dt.year_s      //* year in short notation*/
           );
 
   server.sendHeader("Access-Control-Allow-Origin", "*");
