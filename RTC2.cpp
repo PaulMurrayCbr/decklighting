@@ -2,8 +2,7 @@
 
 #include "RTC2.h"
 
-void RTC2::set(DateTime2& t)
-{
+void RTC2::set(DateTime2 & t) {
   uint8_t i, century;
 
   if (t.year >= 2000) {
@@ -14,7 +13,15 @@ void RTC2::set(DateTime2& t)
     t.year_s = t.year - 1900;
   }
 
-  uint8_t TimeDate[7] = { t.sec, t.min, t.hour, t.wday, t.mday, t.mon, t.year_s };
+  uint8_t TimeDate[7] = {
+    t.sec,
+    t.min,
+    t.hour,
+    t.wday,
+    t.mday,
+    t.mon,
+    t.year_s
+  };
 
   w.beginTransmission(DS3231_I2C_ADDR);
   w.write(DS3231_TIME_CAL_ADDR);
@@ -27,9 +34,8 @@ void RTC2::set(DateTime2& t)
   w.endTransmission();
 }
 
-void RTC2::get(DateTime2& t)
-{
-  uint8_t TimeDate[7];        //second,minute,hour,dow,day,month,year
+void RTC2::get(DateTime2 & t) {
+  uint8_t TimeDate[7]; //second,minute,hour,dow,day,month,year
   uint8_t century = 0;
   uint8_t i, n;
   uint16_t year_full;
@@ -75,16 +81,15 @@ void RTC2::get(DateTime2& t)
   t.year_s = TimeDate[6];
 }
 
-void RTC2::set_addr(const uint8_t addr, const uint8_t val)
-{
+void RTC2::set_addr(const uint8_t addr,
+  const uint8_t val) {
   w.beginTransmission(DS3231_I2C_ADDR);
   w.write(addr);
   w.write(val);
   w.endTransmission();
 }
 
-uint8_t RTC2::get_addr(const uint8_t addr)
-{
+uint8_t RTC2::get_addr(const uint8_t addr) {
   uint8_t rv;
 
   w.beginTransmission(DS3231_I2C_ADDR);
@@ -108,17 +113,13 @@ uint8_t RTC2::get_addr(const uint8_t addr)
   return rv;
 }
 
-
-
 // control register
 
-void RTC2::set_creg(const uint8_t val)
-{
+void RTC2::set_creg(const uint8_t val) {
   set_addr(DS3231_CONTROL_ADDR, val);
 }
 
-uint8_t RTC2::get_creg(void)
-{
+uint8_t RTC2::get_creg(void) {
   uint8_t rv;
   rv = get_addr(DS3231_CONTROL_ADDR);
   return rv;
@@ -134,13 +135,11 @@ uint8_t RTC2::get_creg(void)
   bit0 A1F      Alarm 1 Flag - (1 if alarm1 was triggered)
 */
 
-void RTC2::set_sreg(const uint8_t val)
-{
+void RTC2::set_sreg(const uint8_t val) {
   set_addr(DS3231_STATUS_ADDR, val);
 }
 
-uint8_t RTC2::get_sreg(void)
-{
+uint8_t RTC2::get_sreg(void) {
   uint8_t rv;
   rv = get_addr(DS3231_STATUS_ADDR);
   return rv;
@@ -148,14 +147,13 @@ uint8_t RTC2::get_sreg(void)
 
 // aging register
 
-void RTC2::set_aging(const int8_t val)
-{
+void RTC2::set_aging(const int8_t val) {
   uint8_t reg;
 
   if (val >= 0)
     reg = val;
   else
-    reg = ~(-val) + 1;      // 2C
+    reg = ~(-val) + 1; // 2C
 
   /*
      At 25°C the aging change of:
@@ -169,15 +167,14 @@ void RTC2::set_aging(const int8_t val)
   set_creg(get_creg() | DS3231_CONTROL_CONV);
 }
 
-int8_t RTC2::get_aging(void)
-{
+int8_t RTC2::get_aging(void) {
   uint8_t reg;
   int8_t rv;
 
   reg = get_addr(DS3231_AGING_OFFSET_ADDR);
 
   if ((reg & 0x80) != 0)
-    rv = reg | ~((1 << 8) - 1);     // if negative get two's complement
+    rv = reg | ~((1 << 8) - 1); // if negative get two's complement
   else
     rv = reg;
 
@@ -186,8 +183,7 @@ int8_t RTC2::get_aging(void)
 
 // temperature register
 
-float RTC2::get_treg()
-{
+float RTC2::get_treg() {
   float rv;
   uint8_t temp_msb, temp_lsb;
   int8_t nint;
@@ -212,7 +208,7 @@ float RTC2::get_treg()
   temp_lsb = w.read() >> 6;
 
   if ((temp_msb & 0x80) != 0)
-    nint = temp_msb | ~((1 << 8) - 1);      // if negative get two's complement
+    nint = temp_msb | ~((1 << 8) - 1); // if negative get two's complement
   else
     nint = temp_msb;
 
@@ -221,8 +217,7 @@ float RTC2::get_treg()
   return rv;
 }
 
-void RTC2::set_32kHz_output(const uint8_t on)
-{
+void RTC2::set_32kHz_output(const uint8_t on) {
   /*
      Note, the pin1 is an open drain pin, therfore a pullup
      resitor is required to use the output.
@@ -243,9 +238,17 @@ void RTC2::set_32kHz_output(const uint8_t on)
 
 // flags are: A1M1 (seconds), A1M2 (minutes), A1M3 (hour),
 // A1M4 (day) 0 to enable, 1 to disable, DY/DT (dayofweek == 1/dayofmonth == 0)
-void RTC2::set_a1(const uint8_t s, const uint8_t mi, const uint8_t h, const uint8_t d, const uint8_t * flags)
-{
-  uint8_t t[4] = { s, mi, h, d };
+void RTC2::set_a1(const uint8_t s,
+  const uint8_t mi,
+    const uint8_t h,
+      const uint8_t d,
+        const uint8_t * flags) {
+  uint8_t t[4] = {
+    s,
+    mi,
+    h,
+    d
+  };
   uint8_t i;
 
   w.beginTransmission(DS3231_I2C_ADDR);
@@ -261,11 +264,11 @@ void RTC2::set_a1(const uint8_t s, const uint8_t mi, const uint8_t h, const uint
   w.endTransmission();
 }
 
-void RTC2::get_a1(char *buf, const uint8_t len)
-{
+void RTC2::get_a1(char * buf,
+  const uint8_t len) {
   uint8_t n[4];
-  uint8_t t[4];               //second,minute,hour,day
-  uint8_t f[5];               // flags
+  uint8_t t[4]; //second,minute,hour,day
+  uint8_t f[5]; // flags
   uint8_t i;
 
   w.beginTransmission(DS3231_I2C_ADDR);
@@ -294,30 +297,34 @@ void RTC2::get_a1(char *buf, const uint8_t len)
   t[3] = bcdtodec(n[3] & 0x3F);
 
   snprintf(buf, len,
-           "s%02d m%02d h%02d d%02d fs%d m%d h%d d%d wm%d %d %d %d %d",
-           t[0], t[1], t[2], t[3], f[0], f[1], f[2], f[3], f[4], n[0],
-           n[1], n[2], n[3]);
+    "s%02d m%02d h%02d d%02d fs%d m%d h%d d%d wm%d %d %d %d %d",
+    t[0], t[1], t[2], t[3], f[0], f[1], f[2], f[3], f[4], n[0],
+    n[1], n[2], n[3]);
 
 }
 
 // when the alarm flag is cleared the pulldown on INT is also released
-void RTC2::clear_a1f(void)
-{
+void RTC2::clear_a1f(void) {
   uint8_t reg_val;
 
   reg_val = get_sreg() & ~DS3231_STATUS_A1F;
   set_sreg(reg_val);
 }
 
-uint8_t RTC2::triggered_a1(void)
-{
-  return  get_sreg() & DS3231_STATUS_A1F;
+uint8_t RTC2::triggered_a1(void) {
+  return get_sreg() & DS3231_STATUS_A1F;
 }
 
 // flags are: A2M2 (minutes), A2M3 (hour), A2M4 (day) 0 to enable, 1 to disable, DY/DT (dayofweek == 1/dayofmonth == 0) -
-void RTC2::set_a2(const uint8_t mi, const uint8_t h, const uint8_t d, const uint8_t * flags)
-{
-  uint8_t t[3] = { mi, h, d };
+void RTC2::set_a2(const uint8_t mi,
+  const uint8_t h,
+    const uint8_t d,
+      const uint8_t * flags) {
+  uint8_t t[3] = {
+    mi,
+    h,
+    d
+  };
   uint8_t i;
 
   w.beginTransmission(DS3231_I2C_ADDR);
@@ -333,11 +340,11 @@ void RTC2::set_a2(const uint8_t mi, const uint8_t h, const uint8_t d, const uint
   w.endTransmission();
 }
 
-void RTC2::get_a2(char *buf, const uint8_t len)
-{
+void RTC2::get_a2(char * buf,
+  const uint8_t len) {
   uint8_t n[3];
-  uint8_t t[3];               //second,minute,hour,day
-  uint8_t f[4];               // flags
+  uint8_t t[3]; //second,minute,hour,day
+  uint8_t f[4]; // flags
   uint8_t i;
 
   w.beginTransmission(DS3231_I2C_ADDR);
@@ -357,8 +364,6 @@ void RTC2::get_a2(char *buf, const uint8_t len)
   if (!gotData)
     return; // error timeout
 
-
-
   for (i = 0; i <= 2; i++) {
     n[i] = w.read();
     f[i] = (n[i] & 0x80) >> 7;
@@ -369,38 +374,34 @@ void RTC2::get_a2(char *buf, const uint8_t len)
   t[2] = bcdtodec(n[2] & 0x3F);
 
   snprintf(buf, len, "m%02d h%02d d%02d fm%d h%d d%d wm%d %d %d %d", t[0],
-           t[1], t[2], f[0], f[1], f[2], f[3], n[0], n[1], n[2]);
+    t[1], t[2], f[0], f[1], f[2], f[3], n[0], n[1], n[2]);
 
 }
 
 // when the alarm flag is cleared the pulldown on INT is also released
-void RTC2::clear_a2f(void)
-{
+void RTC2::clear_a2f(void) {
   uint8_t reg_val;
 
   reg_val = get_sreg() & ~DS3231_STATUS_A2F;
   set_sreg(reg_val);
 }
 
-uint8_t RTC2::triggered_a2(void)
-{
-  return  get_sreg() & DS3231_STATUS_A2F;
+uint8_t RTC2::triggered_a2(void) {
+  return get_sreg() & DS3231_STATUS_A2F;
 }
 
 // helpers
 
-uint8_t dectobcd(const uint8_t val)
-{
+uint8_t dectobcd(const uint8_t val) {
   return ((val / 10 * 16) + (val % 10));
 }
 
-uint8_t bcdtodec(const uint8_t val)
-{
+uint8_t bcdtodec(const uint8_t val) {
   return ((val / 16 * 10) + (val % 16));
 }
 
-uint8_t inp2toi(char *cmd, const uint16_t seek)
-{
+uint8_t inp2toi(char * cmd,
+  const uint16_t seek) {
   uint8_t rv;
   rv = (cmd[seek] - 48) * 10 + cmd[seek + 1] - 48;
   return rv;

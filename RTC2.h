@@ -1,7 +1,7 @@
 #ifndef RTC2_H
 #define RTC2_H
 
-#include <Arduino.h>
+//#include <Arduino.h>
 #include <Wire.h>
 
 class DateTime2 {
