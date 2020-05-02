@@ -8,7 +8,7 @@
 TwoWire softwire;
 RTC2 rtc(softwire);
 
-void setup_clock() {
+void clock_setup() {
   softwire.begin(D4, D3);
 
   /*

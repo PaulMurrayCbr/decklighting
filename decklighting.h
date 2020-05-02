@@ -6,16 +6,11 @@
 void toJson(DateTime2 & dt);
 extern char json[];
 
-
 class State {
   public:
     int a;
 };
 
-
 extern State state;
-
-
-
 
 #endif

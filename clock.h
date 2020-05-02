@@ -5,6 +5,6 @@
 
 extern RTC2 rtc;
 
-void setup_clock();
+void clock_setup();
 
 #endif
