@@ -1,6 +1,8 @@
 
 #include "kelvin.h"
 
+/* With grateful thanks to https://andi-siess.de/rgb-to-color-temperature/ */
+
 Kelvin kelvin[KELVIN_SZ] = {
     Kelvin(1000, 255, 56, 0),
     Kelvin(1100, 255, 71, 0),

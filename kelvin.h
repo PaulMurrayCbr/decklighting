@@ -1,6 +1,8 @@
 #ifndef KELVIN_H
 #define KELVIN_H
 
+/* With grateful thanks to https://andi-siess.de/rgb-to-color-temperature/ */
+
 #include <stdint.h>
 
 #define K_LO_TEMP 1000
