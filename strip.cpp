@@ -3,7 +3,6 @@
 
 #include "decklighting.h"
 #include "clock.h"
-#include "kelvin.h"
 
 const int PIXELS = 110;
 
@@ -11,26 +10,14 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXELS, D8, NEO_GRB + NEO_KHZ800);
 
 uint32_t Wheel(byte WheelPos);
 
-uint8_t cur[PIXELS];
-uint8_t next[PIXELS];
-
 #define MAXHOT 35
-
-
 
 void strip_setup() {
   strip.begin();
   strip.setBrightness(128);
 }
 
-#define SPREADCOOL 4
-#define SPREADSLOW 20
-#define COOLSLOW 3
 #define UPDATESPEED 50
-#define HOTPER10SEC 50
-
-#define UPDATESPER10SEC (1000/UPDATESPEED*10)
-#define HOTCHANCE (UPDATESPER10SEC/HOTPER10SEC)
 
 void strip_loop() {
   static long lastUpdate;
@@ -38,33 +25,8 @@ void strip_loop() {
   if (millis() - lastUpdate < UPDATESPEED) return;
   lastUpdate = millis();
 
-
-  memset(next, 0, PIXELS);
-  for(int i = 0; i<PIXELS; i++) {
-    if(cur[i]>0 && random(COOLSLOW)==0) cur[i]--;  
-  }
-
-  for(int i = 0; i<PIXELS;i++) {
-    next[i] = cur[i];
-    if(i>0 && cur[i-1]>SPREADCOOL && cur[i-1]-SPREADCOOL > next[i] && random(SPREADSLOW)==0) {
-      next[i] = cur[i-1]-SPREADCOOL;
-    }
-    if(i<PIXELS-1 && cur[i+1]>SPREADCOOL && cur[i+1]-SPREADCOOL > next[i] && random(SPREADSLOW)==0) {
-      next[i] = cur[i+1]-SPREADCOOL;
-    }
-  }
-  
-  memcpy(cur, next, PIXELS);
-
-  if(random(HOTCHANCE)==0) {
-    cur[random(PIXELS)] = MAXHOT;
-  }
-
   for (int i = 0; i < strip.numPixels(); i++) {
-    int idx = cur[i];
-
-    strip.setPixelColor(i, kelvin[idx].r & 255, kelvin[idx].g & 255, kelvin[idx].b & 255);
-
+    strip.setPixelColor(i, Wheel((i+lastUpdate/500))%256);
   }
   strip.show();
 
