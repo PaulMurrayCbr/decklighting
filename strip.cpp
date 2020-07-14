@@ -3,33 +3,40 @@
 
 #include "decklighting.h"
 #include "clock.h"
+#include "strip.h"
 
-const int PIXELS = 110;
+const int GAMEROOM_PIXELS = 30;
+const int THEATRE_PIXELS = 20;
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXELS, D8, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(GAMEROOM_PIXELS + THEATRE_PIXELS, D8, NEO_GRB + NEO_KHZ800);
 
 uint32_t Wheel(byte WheelPos);
 
-#define MAXHOT 35
-
 void strip_setup() {
   strip.begin();
-  strip.setBrightness(128);
+  strip_update();
 }
 
-#define UPDATESPEED 50
-
 void strip_loop() {
-  static long lastUpdate;
+}
 
-  if (millis() - lastUpdate < UPDATESPEED) return;
-  lastUpdate = millis();
+void strip_update() {
+  strip.setBrightness(state.brightness);
 
-  for (int i = 0; i < strip.numPixels(); i++) {
-    strip.setPixelColor(i, Wheel((i+lastUpdate/500))%256);
+  uint32_t c;
+
+  c = strip.Color(state.theatre.color.r, state.theatre.color.g, state.theatre.color.b);
+  for(int i = 0; i<THEATRE_PIXELS; i++) {
+    strip.setPixelColor(i, c);
   }
-  strip.show();
+  
+  c = strip.Color(state.gameroom.color.r, state.gameroom.color.g, state.gameroom.color.b);
+  for(int i = 0; i<GAMEROOM_PIXELS; i++) {
+    strip.setPixelColor(THEATRE_PIXELS+i, c);
+  }
 
+  strip.show();
+  
 }
 
 // Input a value 0 to 255 to get a color value.

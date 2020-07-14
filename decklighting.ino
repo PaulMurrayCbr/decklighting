@@ -38,7 +38,7 @@ void toJson(DateTime2 & dt) {
            "\n\t\t\"isdst\": %d, "
            "\n\t\t\"year_s\": %d "
            "\n\t}\n}",
-           state.a, millis(), //
+           0, millis(), //
            dt.sec, //* seconds */
            dt.min, //* minutes */
            dt.hour, //* hours */

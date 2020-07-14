@@ -3,5 +3,7 @@
 
 void strip_setup();
 void strip_loop();
+void strip_update();
+
 
 #endif
