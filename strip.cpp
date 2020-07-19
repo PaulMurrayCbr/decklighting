@@ -5,8 +5,11 @@
 #include "clock.h"
 #include "strip.h"
 
-const int GAMEROOM_PIXELS = 30;
-const int THEATRE_PIXELS = 20;
+const int GAMEROOM_PIXELS = 421;
+const int THEATRE_PIXELS = 706;
+
+void strip_chunk(RoomState& room, int start, int len);
+
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(GAMEROOM_PIXELS + THEATRE_PIXELS, D8, NEO_GRB + NEO_KHZ800);
 
@@ -23,19 +26,32 @@ void strip_loop() {
 void strip_update() {
   strip.setBrightness(state.brightness);
 
-  uint32_t c;
+//  uint32_t c;
+//
+//  c = strip.Color(state.theatre.color.r, state.theatre.color.g, state.theatre.color.b);
+//  for(int i = 0; i<THEATRE_PIXELS; i++) {
+//    strip.setPixelColor(i, c);
+//  }
+//  
+//  c = strip.Color(state.gameroom.color.r, state.gameroom.color.g, state.gameroom.color.b);
+//  for(int i = 0; i<GAMEROOM_PIXELS; i++) {
+//    strip.setPixelColor(THEATRE_PIXELS+i, c);
+//  }
 
-  c = strip.Color(state.theatre.color.r, state.theatre.color.g, state.theatre.color.b);
-  for(int i = 0; i<THEATRE_PIXELS; i++) {
-    strip.setPixelColor(i, c);
-  }
-  
-  c = strip.Color(state.gameroom.color.r, state.gameroom.color.g, state.gameroom.color.b);
-  for(int i = 0; i<GAMEROOM_PIXELS; i++) {
-    strip.setPixelColor(THEATRE_PIXELS+i, c);
-  }
+  strip_chunk(state.theatre, 0, THEATRE_PIXELS);
+  strip_chunk(state.gameroom, THEATRE_PIXELS, GAMEROOM_PIXELS);
 
   strip.show();
+  
+}
+
+void strip_chunk(RoomState& room, int start, int len) {
+  uint32_t c;
+
+  c = strip.Color(room.color.r, room.color.g, room.color.b);
+  for(int i = 0; i<len; i++) {
+    strip.setPixelColor(start+i, c);
+  }
   
 }
 
