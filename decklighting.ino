@@ -13,7 +13,7 @@ void setup() {
   Serial.begin(115200);
 
   webserver_setup();
-  clock_setup();
+//  clock_setup();
   strip_setup();
 }
 

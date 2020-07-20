@@ -15,8 +15,9 @@ class RGB {
 
 class RoomState {
   public:
-  RGB color;
-  RoomState(int r, int g, int b) : color(r,g,b) {}
+  RGB color1;
+  RGB color2;
+  RoomState(int r, int g, int b) : color1(r,g,b), color2(r,g,b) {}
 };
 
 class State {
@@ -24,6 +25,11 @@ class State {
     unsigned char brightness;
     RoomState theatre;
     RoomState gameroom;
+
+    boolean allOn = true;
+    boolean gameroomOn = true;
+    boolean theatreOn = true;
+    boolean tworooms = true;
 
   State() :
     theatre(64,64,192),

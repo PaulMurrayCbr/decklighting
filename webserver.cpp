@@ -14,9 +14,11 @@
 
 ESP8266WebServer server(80); // Create a webserver object that listens for HTTP request on port 80
 
+
+
 //void handleState();
 void handleRoot();
-void writeColor(RoomState &room, char* p);
+void writeColor(RGB &color, char* p);
 void handleGameroom();
 void handleTheatre();
 void updateRoom(RoomState& room);
@@ -24,42 +26,109 @@ void handleGlobal();
 void handleFavicon();
 void redirectToRoot();
 
+void handleAllOnOff();
+void handleGameroomOnOff();
+void handleTheatreOnOff();
+void handleTworoomsOnOff();
+
 char content[] =
-  R"zzzz(<html><body>
-<div>
- <form action="http://192.168.0.14/gameroom">
-  <div><label for="gameroom-color">Game room <input type="color" id="gameroom-color" name="color" value="#*AAAAA"></label><input type="submit"></div>
- </form>
+  R"zzzz(<html><head>
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <style>
+  @viewport { width: device-width; zoom: 1.0;} 
+  .main { border: thin solid gray; margin: 2px; padding: .5em;} 
+  </style>
+  </head><body>
+012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789  
+<div class="main">
+ <form action="http://192.168.0.14/allonoff"><input type="submit" value="On/Off"></form>
+ <form action="http://192.168.0.14/theatreonoff"><input type="submit" value="Theatre On/Off"></form>
+ <form action="http://192.168.0.14/gameroomonoff"><input type="submit" value="Game Room On/Off"></form>
+   <form action="http://192.168.0.14/tworoomsonoff"><input type="submit" value="One Room/Two Rooms"></form>
 </div>
-<div>
+<div class="main">
  <form action="http://192.168.0.14/theatre">
-  <div><label for="theatre-color">Theatre <input type="color" id="theatre-color" name="color" value="#*BBBBB"></label><input type="submit"></div>
+ Theatre
+  <div><label for="theatre-color1">Colour 1 <input type="color" id="theatre-color1" name="color1" value="#theac1"></label></div>
+  <div><label for="theatre-color2">Colour 2 <input type="color" id="theatre-color2" name="color2" value="#theac2"></label></div>
+  <div><input type="submit" value="Set"></div>
  </form>
 </div>
-<div>
+<div class="main">
+ <form action="http://192.168.0.14/gameroom">
+  Game Room
+  <div><label for="gameroom-color1">Colour 1 <input type="color" id="gameroom-color1" name="color1" value="#grooc1"></label></div>
+  <div><label for="gameroom-color2">Colour 2 <input type="color" id="gameroom-color2" name="color2" value="#grooc2"></label></div>
+  <div><input type="submit" value="Set"></div>
+ </form>
+</div>
+<div class="main">
  <form action="http://192.168.0.14/global">
-  <div><label for="brightness">Brightness<input type="number" id="brightness" name="brightness" value="*55"></label><input type="submit"></div>
+  <div><label for="brightness">Brightness <input type="number" id="brightness" name="brightness" value="*BR"></label><input type="submit" value="Set"></div>
  </form>
 </div>
 </body></html>
 )zzzz";
-
-char *gameroomP, *theatreP, *brightnessP;
 
 char hex[] = "0123456789ABCDEF";
 
 inline char encodehex(unsigned n) { return hex[n&15]; }
 inline int decodehex(char c) { if(c>='a') c-='a'-'A';return  strchr(hex,c)-hex; }
 
-void webserver_setup() {
-  gameroomP = strchr(content, '*');
-  theatreP = strchr(gameroomP+1, '*');
-  brightnessP = strchr(theatreP+1, '*');
+class RoomStateHandler {
+  public:
+  RoomState& rs;
+  char *color1;
+  char *color2;
 
-  Serial.println(content);
-  Serial.println(gameroomP);
-  Serial.println(theatreP);
-  Serial.println(brightnessP);
+  RoomStateHandler(RoomState& rs) : rs(rs) {}
+
+  void writeState() {
+    writeColor(rs.color1, color1);
+    writeColor(rs.color2, color2);
+  }
+
+  void readHttp()  {
+    boolean update = false;
+    for(int i = 0; i< server.args(); i++) {
+      const char *arg = server.arg(i).c_str();
+      const char *argName = server.argName(i).c_str();
+      if(strcmp(argName, "color1")==0) {
+        arg++;
+        rs.color1.r = (decodehex(arg[0]) << 4) | decodehex(arg[1]);
+        rs.color1.g = (decodehex(arg[2]) << 4) | decodehex(arg[3]);
+        rs.color1.b = (decodehex(arg[4]) << 4) | decodehex(arg[5]);
+        update = true;
+      }
+      if(strcmp(argName, "color2")==0) {
+        arg++;
+        rs.color2.r = (decodehex(arg[0]) << 4) | decodehex(arg[1]);
+        rs.color2.g = (decodehex(arg[2]) << 4) | decodehex(arg[3]);
+        rs.color2.b = (decodehex(arg[4]) << 4) | decodehex(arg[5]);
+        update = true;
+      }
+    }
+
+    if(update) strip_update();  
+  }
+
+} gameroom(state.gameroom), theatre(state.theatre);
+
+
+char *brightnessP;
+char *msg;
+
+
+void webserver_setup() {
+
+  gameroom.color1 = strstr(content, "grooc1");
+  gameroom.color2 = strstr(content, "grooc2");
+  theatre.color1 = strstr(content, "theac1");
+  theatre.color2 = strstr(content, "theac2");
+
+  brightnessP = strstr(content, "*BR");
+  msg = strstr(content, "0123456789");
+  memset(msg, ' ', 120);
   
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
@@ -90,6 +159,12 @@ void webserver_setup() {
   server.on("/gameroom", handleGameroom);
   server.on("/theatre", handleTheatre);
   server.on("/global", handleGlobal);
+
+  server.on("/allonoff", handleAllOnOff);
+  server.on("/gameroomonoff", handleGameroomOnOff);
+  server.on("/theatreonoff", handleTheatreOnOff);
+  server.on("/tworoomsonoff", handleTworoomsOnOff);
+  
   server.onNotFound([]() {
     Serial.println("got not found");
     server.send(404, "text/plain", "404: Not found");
@@ -103,23 +178,9 @@ void webserver_loop() {
     server.handleClient(); // Listen for HTTP requests from clients
 }
 
-
-//void handleState() {
-//  DateTime2 dt;
-//  rtc.get(dt);
-//  toJson(dt);
-//
-//  server.sendHeader(F("Access-Control-Allow-Origin"), F("*"));
-//  server.sendHeader(F("Access-Control-Allow-Methods"), F("POST, GET, OPTIONS"));
-//  server.sendHeader(F("Access-Control-Allow-Headers"), F("*"));
-//  server.sendHeader(F("Access-Control-Max-Age"), F("86400"));
-//
-//  server.send(200, "application/json", json); // Send HTTP status 200 (Ok) and send some text to the browser/client
-//}
-
 void handleRoot() {
-  writeColor(state.gameroom, gameroomP);
-  writeColor(state.theatre, theatreP);
+  gameroom.writeState();
+  theatre.writeState();
 
   brightnessP[0] = (state.brightness / 100) % 10 + '0';
   brightnessP[1] = (state.brightness / 10) % 10 + '0';
@@ -127,43 +188,40 @@ void handleRoot() {
     
   server.send(200, "text/html", content); // Send HTTP status 200 (Ok) and send some text to the browser/client
 
+  memset(msg, ' ', 120);
 }
 
-void writeColor(RoomState &room, char* p) {
-    p[0] = encodehex(room.color.r >> 4);
-    p[1] = encodehex(room.color.r);
-    p[2] = encodehex(room.color.g >> 4);
-    p[3] = encodehex(room.color.g);
-    p[4] = encodehex(room.color.b >> 4);
-    p[5] = encodehex(room.color.b);
+void writeColor(RGB& color, char* p) {
+    p[0] = encodehex(color.r >> 4);
+    p[1] = encodehex(color.r);
+    p[2] = encodehex(color.g >> 4);
+    p[3] = encodehex(color.g);
+    p[4] = encodehex(color.b >> 4);
+    p[5] = encodehex(color.b);
   
 }
 
 void handleGameroom() {
-    updateRoom(state.gameroom);
+    gameroom.readHttp();
+    memset(msg, ' ', 120);
+    sprintf(msg, "gameroom updated to %d/%d/%d - %d/%d/%d",
+     state.gameroom.color1.r, state.gameroom.color1.g, state.gameroom.color1.b,
+     state.gameroom.color2.r, state.gameroom.color2.g, state.gameroom.color2.b
+    );
+    msg[strlen(msg)] = ' ';
+    
     redirectToRoot();
 }
 
 void handleTheatre() {
-    updateRoom(state.theatre);
+    theatre.readHttp();
+    memset(msg, ' ', 120);
+    sprintf(msg, "theatre updated to %d/%d/%d - %d/%d/%d",
+     state.theatre.color1.r, state.theatre.color1.g, state.theatre.color1.b,
+     state.theatre.color2.r, state.theatre.color2.g, state.theatre.color2.b
+    );
+    msg[strlen(msg)] = ' ';
     redirectToRoot();
-}
-
-void updateRoom(RoomState& room) {
-    boolean update = false;
-    for(int i = 0; i< server.args(); i++) {
-      const char *arg = server.arg(i).c_str();
-      const char *argName = server.argName(i).c_str();
-      if(strcmp(argName, "color")==0) {
-        arg++;
-        room.color.r = (decodehex(arg[0]) << 4) | decodehex(arg[1]);
-        room.color.g = (decodehex(arg[2]) << 4) | decodehex(arg[3]);
-        room.color.b = (decodehex(arg[4]) << 4) | decodehex(arg[5]);
-        update = true;
-      }
-    }
-
-    if(update) strip_update();  
 }
 
 void handleGlobal() {
@@ -180,7 +238,75 @@ void handleGlobal() {
 
     if(update) strip_update();
 
+    memset(msg, ' ', 120);
+    sprintf(msg, "Brightness updated to %d", state.brightness);
+    msg[strlen(msg)] = ' ';
+
     redirectToRoot();
+}
+
+void handleAllOnOff() {
+  state.allOn = !state.allOn;
+  strip_update();
+
+    memset(msg, ' ', 120);
+  sprintf(msg, 
+  "<B>%s</B>, %s, %s, %s.",
+  state.allOn ? "All On" : "All Off",
+  state.theatreOn ? "Theatre On" : "Theatre Off",
+  state.gameroomOn ? "Gameroom On" : "Gameroom Off",
+  state.tworooms ? "Separate Rooms" : "One Room");
+  msg[strlen(msg)] = ' ';
+  
+  redirectToRoot();
+}
+
+void handleTheatreOnOff() {
+  state.theatreOn = !state.theatreOn;
+  strip_update();
+
+    memset(msg, ' ', 120);
+  sprintf(msg, 
+  "%s, <B>%s</B>, %s, %s.",
+  state.allOn ? "All On" : "All Off",
+  state.theatreOn ? "Theatre On" : "Theatre Off",
+  state.gameroomOn ? "Gameroom On" : "Gameroom Off",
+  state.tworooms ? "Separate Rooms" : "One Room");
+  msg[strlen(msg)] = ' ';
+  
+  redirectToRoot();
+}
+
+void handleGameroomOnOff() {
+  state.gameroomOn = !state.gameroomOn;
+  strip_update();
+
+    memset(msg, ' ', 120);
+  sprintf(msg, 
+  "%s, %s, <B>%s</B>, %s.",
+  state.allOn ? "All On" : "All Off",
+  state.theatreOn ? "Theatre On" : "Theatre Off",
+  state.gameroomOn ? "Gameroom On" : "Gameroom Off",
+  state.tworooms ? "Separate Rooms" : "One Room");
+  msg[strlen(msg)] = ' ';
+  
+  redirectToRoot();
+}
+
+void handleTworoomsOnOff() {
+  state.tworooms = !state.tworooms;
+  strip_update();
+
+    memset(msg, ' ', 120);
+  sprintf(msg, 
+  "%s, %s, %s, <B>%s</B>.",
+  state.allOn ? "All On" : "All Off",
+  state.theatreOn ? "Theatre On" : "Theatre Off",
+  state.gameroomOn ? "Gameroom On" : "Gameroom Off",
+  state.tworooms ? "Separate Rooms" : "One Room");
+  msg[strlen(msg)] = ' ';
+  
+  redirectToRoot();
 }
 
 void redirectToRoot() {
