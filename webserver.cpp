@@ -14,8 +14,6 @@
 
 ESP8266WebServer server(80); // Create a webserver object that listens for HTTP request on port 80
 
-
-
 //void handleState();
 void handleRoot();
 void writeColor(RGB &color, char* p);
@@ -31,6 +29,7 @@ void handleGameroomOnOff();
 void handleTheatreOnOff();
 void handleTworoomsOnOff();
 
+void setupStaticEffect();
 void handleStaticEffect();
 
 char content[] =
@@ -60,7 +59,7 @@ char content[] =
   .main { border: thin solid gray; margin: 2px; padding: .5em;} 
   </style>
   </head><body>
-012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789  
+<p>012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789  </p>
 <div class="main">
  <form action="http://192.168.0.14/allonoff"><input type="submit" value="On/Off"></form>
  <form action="http://192.168.0.14/theatreonoff"><input type="submit" value="Theatre On/Off"></form>
@@ -120,10 +119,11 @@ char content[] =
 </body></html>
 )zzzz";
 
+
 char hex[] = "0123456789ABCDEF";
 
-inline char encodehex(unsigned n) { return hex[n&15]; }
-inline int decodehex(char c) { if(c>='a') c-='a'-'A';return  strchr(hex,c)-hex; }
+char encodehex(unsigned n) { return hex[n&15]; }
+int decodehex(char c) { if(c>='a') c-='a'-'A';return  strchr(hex,c)-hex; }
 
 class RoomStateHandler {
   public:
@@ -185,6 +185,8 @@ void webserver_setup() {
   brightnessP = strstr(content, "*BR");
   msg = strstr(content, "0123456789");
   memset(msg, ' ', 120);
+
+  setupStaticEffect();
   
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
@@ -220,6 +222,9 @@ void webserver_setup() {
   server.on("/gameroomonoff", handleGameroomOnOff);
   server.on("/theatreonoff", handleTheatreOnOff);
   server.on("/tworoomsonoff", handleTworoomsOnOff);
+
+  server.on("/effect/static", handleStaticEffect);
+
   
   server.onNotFound([]() {
     Serial.println("got not found");
@@ -369,17 +374,38 @@ void handleTworoomsOnOff() {
 
 void redirectToRoot() {
   server.sendHeader(F("Location"), F("/"));
-
-  server.send(303, F("text/plain"), F("redirect")); // Send HTTP status 200 (Ok) and send some text to the browser/client
+  server.send(303, F("text/plain"), F("Ok")); // Send HTTP status 200 (Ok) and send some text to the browser/client
 }
 
 void handleFavicon() {
   server.send_P(200, (PGM_P) F("image/x-icon"), (PGM_P) favicon, favicon_len);  
 }
 
-void handleStaticEffect() {
-  memset(msg, ' ', 120);
-  sprintf(msg, "Coming Soon!");
-  msg[strlen(msg)] = ' ';
-  redirectToRoot();
+char *effectroomstringwithquotes = "\"theatre\"";
+char *effectroomstringwithoutquotes = "theatre";
+RoomState *effectRoom = &state.theatre;
+
+void readEffectRoom() {
+  for(int i = 0; i< server.args(); i++) {
+    const char *arg = server.arg(i).c_str();
+    const char *argName = server.argName(i).c_str();
+
+    if((strcmp(argName, "room")==0) && (strcmp(arg, "theatre")==0)) {
+      effectRoom = &state.theatre;
+
+//      Serial.println("effectroom is now state.theatre");
+//      Serial.println((long)effectRoom);
+      
+      effectroomstringwithoutquotes = "theatre";
+      effectroomstringwithquotes = "\"theatre\"";
+    }
+    if((strcmp(argName, "room")==0) && (strcmp(arg, "gameroom")==0)) {
+      effectRoom = &state.gameroom;
+//      Serial.println("effectroom is now state.gameroom");
+//      Serial.println((long)effectRoom);
+      effectroomstringwithoutquotes = "gameroom";
+      effectroomstringwithquotes = "\"gameroom\"";
+    }
+  }
+
 }

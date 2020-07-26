@@ -13,12 +13,15 @@ class RGB {
   RGB() : RGB(64,64,192) { }
 };
 
+enum Effect { STATIC };
+
 class RoomState {
   public:
   RGB color1;
   RGB color2;
 
   int density = 1;
+  Effect effect = STATIC;
   
   RoomState(int r, int g, int b) : color1(r,g,b), color2(r,g,b) {}
 };

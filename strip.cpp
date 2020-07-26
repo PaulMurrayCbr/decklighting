@@ -5,12 +5,13 @@
 #include "clock.h"
 #include "strip.h"
 
-const int GAMEROOM_PIXELS = 421;
-const int THEATRE_PIXELS = 706;
-//const int GAMEROOM_PIXELS = 50;
-//const int THEATRE_PIXELS = 50;
+//const int GAMEROOM_PIXELS = 421;
+//const int THEATRE_PIXELS = 706;
+const int GAMEROOM_PIXELS = 50;
+const int THEATRE_PIXELS = 50;
 
 void strip_chunk(RoomState& room, Strip& strip);
+void strip_static_effect(RoomState& room, Strip& strip);
 
 Adafruit_NeoPixel outputStrip = Adafruit_NeoPixel(GAMEROOM_PIXELS + THEATRE_PIXELS, D8, NEO_GRB + NEO_KHZ800);
 
@@ -113,6 +114,15 @@ inline unsigned lim(double f) {
 }
 
 void strip_chunk(RoomState& room, Strip& strip) {
+  switch (room.effect) {
+    case STATIC:
+      strip_static_effect(room, strip);
+      break;
+  }
+}
+
+void strip_static_effect(RoomState& room, Strip& strip) {
+
   uint32_t c;
 
   double rstart = (unsigned)room.color1.r;
