@@ -31,9 +31,30 @@ void handleGameroomOnOff();
 void handleTheatreOnOff();
 void handleTworoomsOnOff();
 
+void handleStaticEffect();
+
 char content[] =
   R"zzzz(<html><head>
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+  <script>
+    $( function() {
+      $("#theatre-color1").change(function() {
+        $("#theatrecolorform").submit();
+      });
+      $("#theatre-color2").change(function() {
+        $("#theatrecolorform").submit();
+      });
+      $("#gameroom-color1").change(function() {
+        $("#gameroomcolorform").submit();
+      });
+      $("#gameroom-color2").change(function() {
+        $("#gameroomcolorform").submit();
+      });
+    } );
+  </script>
+  
   <style>
   @viewport { width: device-width; zoom: 1.0;} 
   .main { border: thin solid gray; margin: 2px; padding: .5em;} 
@@ -53,11 +74,15 @@ char content[] =
   <input type="hidden" name="color2" value="#FFF0E0">
   <input type="submit" value="ALL WHITE">
  </form>
- <form action="http://192.168.0.14/theatre">
+ <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="1"><input type="submit" value="all on"></form>
+ <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="2"><input type="submit" value="alternate"></form>
+ <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="3"><input type="submit" value="one in 3"></form>
+ <form action="http://192.168.0.14/theatre" id="theatrecolorform">
   <div><label for="theatre-color1">Colour 1 <input type="color" id="theatre-color1" name="color1" value="#theac1"></label></div>
   <div><label for="theatre-color2">Colour 2 <input type="color" id="theatre-color2" name="color2" value="#theac2"></label></div>
   <div><input type="submit" value="Set"></div>
  </form>
+ <form action="http://192.168.0.14/effect/static"><input type="hidden" name="room" value="theatre"><input type="submit" value="Static"></form>
 </div>
 <div class="main">
   Game Room
@@ -66,11 +91,15 @@ char content[] =
   <input type="hidden" name="color2" value="#FFF0E0">
   <input type="submit" value="ALL WHITE">
  </form>
- <form action="http://192.168.0.14/gameroom">
+ <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="1"><input type="submit" value="all on"></form>
+ <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="2"><input type="submit" value="alternate"></form>
+ <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="3"><input type="submit" value="one in 3"></form>
+ <form action="http://192.168.0.14/gameroom" id="gameroomcolorform">
   <div><label for="gameroom-color1">Colour 1 <input type="color" id="gameroom-color1" name="color1" value="#grooc1"></label></div>
   <div><label for="gameroom-color2">Colour 2 <input type="color" id="gameroom-color2" name="color2" value="#grooc2"></label></div>
   <div><input type="submit" value="Set"></div>
  </form>
+ <form action="http://192.168.0.14/effect/static"><input type="hidden" name="room" value="gameroom"><input type="submit" value="Static"></form>
 </div>
 <div class="main">
  <form action="http://192.168.0.14/global">
@@ -126,6 +155,12 @@ class RoomStateHandler {
         rs.color2.r = (decodehex(arg[0]) << 4) | decodehex(arg[1]);
         rs.color2.g = (decodehex(arg[2]) << 4) | decodehex(arg[3]);
         rs.color2.b = (decodehex(arg[4]) << 4) | decodehex(arg[5]);
+        update = true;
+      }
+      if(strcmp(argName, "density")==0) {
+        rs.density = atoi(arg);
+        if(rs.density<1) rs.density = 1;
+        if(rs.density>10) rs.density = 10;
         update = true;
       }
     }
@@ -225,9 +260,10 @@ void writeColor(RGB& color, char* p) {
 void handleGameroom() {
     gameroom.readHttp();
     memset(msg, ' ', 120);
-    sprintf(msg, "gameroom updated to %d/%d/%d - %d/%d/%d",
+    sprintf(msg, "gameroom updated to %d/%d/%d - %d/%d/%d, sparse %d",
      state.gameroom.color1.r, state.gameroom.color1.g, state.gameroom.color1.b,
-     state.gameroom.color2.r, state.gameroom.color2.g, state.gameroom.color2.b
+     state.gameroom.color2.r, state.gameroom.color2.g, state.gameroom.color2.b,
+     state.gameroom.density
     );
     msg[strlen(msg)] = ' ';
     
@@ -237,9 +273,10 @@ void handleGameroom() {
 void handleTheatre() {
     theatre.readHttp();
     memset(msg, ' ', 120);
-    sprintf(msg, "theatre updated to %d/%d/%d - %d/%d/%d",
+    sprintf(msg, "theatre updated to %d/%d/%d - %d/%d/%d, sparse %d",
      state.theatre.color1.r, state.theatre.color1.g, state.theatre.color1.b,
-     state.theatre.color2.r, state.theatre.color2.g, state.theatre.color2.b
+     state.theatre.color2.r, state.theatre.color2.g, state.theatre.color2.b,
+     state.theatre.density
     );
     msg[strlen(msg)] = ' ';
     redirectToRoot();
@@ -338,4 +375,11 @@ void redirectToRoot() {
 
 void handleFavicon() {
   server.send_P(200, (PGM_P) F("image/x-icon"), (PGM_P) favicon, favicon_len);  
+}
+
+void handleStaticEffect() {
+  memset(msg, ' ', 120);
+  sprintf(msg, "Coming Soon!");
+  msg[strlen(msg)] = ' ';
+  redirectToRoot();
 }

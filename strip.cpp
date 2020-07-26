@@ -5,10 +5,10 @@
 #include "clock.h"
 #include "strip.h"
 
-//const int GAMEROOM_PIXELS = 421;
-//const int THEATRE_PIXELS = 706;
-const int GAMEROOM_PIXELS = 50;
-const int THEATRE_PIXELS = 50;
+const int GAMEROOM_PIXELS = 421;
+const int THEATRE_PIXELS = 706;
+//const int GAMEROOM_PIXELS = 50;
+//const int THEATRE_PIXELS = 50;
 
 void strip_chunk(RoomState& room, Strip& strip);
 
@@ -33,11 +33,11 @@ class NeopixelStrip : public Strip {
       outputStrip.setPixelColor(start + n, c);
     }
 }
-wholeroomStrip(0, GAMEROOM_PIXELS + THEATRE_PIXELS),
-               theatreStrip(0, THEATRE_PIXELS),
-               gameroomStrip(THEATRE_PIXELS, GAMEROOM_PIXELS)
+wholeroomStripz(0, GAMEROOM_PIXELS + THEATRE_PIXELS),
+                theatreStripz(0, THEATRE_PIXELS),
+                gameroomStripz(THEATRE_PIXELS, GAMEROOM_PIXELS)
 
-               ;
+                ;
 
 class IncStrip : public Strip {
     Strip &strip;
@@ -56,9 +56,13 @@ class IncStrip : public Strip {
       strip.clear();
     }
     virtual void set(int n, uint32_t c) {
-      outputStrip.setPixelColor(n * inc, c);
+      strip.set(n * inc, c);
     }
-};
+}
+wholeroomStrip(wholeroomStripz),
+               theatreStrip(theatreStripz),
+               gameroomStrip(gameroomStripz);
+
 
 
 uint32_t Wheel(byte WheelPos);
@@ -80,17 +84,21 @@ void strip_update() {
     outputStrip.setBrightness(state.brightness);
 
     if (state.tworooms) {
+      theatreStrip.setInc(state.theatre.density);
+      gameroomStrip.setInc(state.gameroom.density);
+
+      theatreStripz.clear();
+      gameroomStripz.clear();
+
       if (state.theatreOn)
         strip_chunk(state.theatre, theatreStrip);
-      else
-        theatreStrip.clear();
 
       if (state.gameroomOn)
         strip_chunk(state.gameroom, gameroomStrip);
-      else
-        gameroomStrip.clear();
     }
     else {
+      wholeroomStrip.setInc(state.theatre.density);
+      wholeroomStripz.clear();
       strip_chunk(state.theatre, wholeroomStrip);
     }
   }

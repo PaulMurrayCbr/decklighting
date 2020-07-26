@@ -17,6 +17,9 @@ class RoomState {
   public:
   RGB color1;
   RGB color2;
+
+  int density = 1;
+  
   RoomState(int r, int g, int b) : color1(r,g,b), color2(r,g,b) {}
 };
 
