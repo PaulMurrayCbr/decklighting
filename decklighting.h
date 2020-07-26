@@ -40,6 +40,13 @@ class State {
   }
 };
 
+class Strip {
+  public:
+  virtual int getLength() = 0;
+  virtual void clear() = 0;
+  virtual void set(int n, uint32_t c) = 0;
+};
+
 extern State state;
 
 #endif

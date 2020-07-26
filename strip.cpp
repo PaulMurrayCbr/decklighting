@@ -5,19 +5,66 @@
 #include "clock.h"
 #include "strip.h"
 
-const int GAMEROOM_PIXELS = 421;
-const int THEATRE_PIXELS = 706;
+//const int GAMEROOM_PIXELS = 421;
+//const int THEATRE_PIXELS = 706;
+const int GAMEROOM_PIXELS = 50;
+const int THEATRE_PIXELS = 50;
 
-void strip_chunk(RoomState& room, int start, int len);
-void strip_chunk_off(int start, int len);
+void strip_chunk(RoomState& room, Strip& strip);
 
+Adafruit_NeoPixel outputStrip = Adafruit_NeoPixel(GAMEROOM_PIXELS + THEATRE_PIXELS, D8, NEO_GRB + NEO_KHZ800);
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(GAMEROOM_PIXELS + THEATRE_PIXELS, D8, NEO_GRB + NEO_KHZ800);
+class NeopixelStrip : public Strip {
+    const int start;
+    const int len;
+  public:
+    NeopixelStrip(int start, int len) : start(start), len(len) {
+
+    }
+    int getLength()  {
+      return len;
+    }
+    virtual void clear() {
+      for (int i = start; i < start + len; i++) {
+        outputStrip.setPixelColor(i, 0);
+      }
+    }
+    virtual void set(int n, uint32_t c) {
+      outputStrip.setPixelColor(start + n, c);
+    }
+}
+wholeroomStrip(0, GAMEROOM_PIXELS + THEATRE_PIXELS),
+               theatreStrip(0, THEATRE_PIXELS),
+               gameroomStrip(THEATRE_PIXELS, GAMEROOM_PIXELS)
+
+               ;
+
+class IncStrip : public Strip {
+    Strip &strip;
+    int inc = 1;
+  public:
+    IncStrip(Strip& strip) : strip(strip) {}
+
+    void setInc(int n) {
+      inc = n;
+    }
+
+    int getLength()  {
+      return (strip.getLength() - 1) / inc + 1;
+    }
+    virtual void clear() {
+      strip.clear();
+    }
+    virtual void set(int n, uint32_t c) {
+      outputStrip.setPixelColor(n * inc, c);
+    }
+};
+
 
 uint32_t Wheel(byte WheelPos);
 
 void strip_setup() {
-  strip.begin();
+  outputStrip.begin();
   strip_update();
 }
 
@@ -26,54 +73,38 @@ void strip_loop() {
 
 void strip_update() {
   if (!state.allOn) {
-    strip.setBrightness(0);
-    strip_chunk_off(0, GAMEROOM_PIXELS + THEATRE_PIXELS);
+    outputStrip.setBrightness(0);
+    wholeroomStrip.clear();
   }
   else {
-    strip.setBrightness(state.brightness);
+    outputStrip.setBrightness(state.brightness);
 
     if (state.tworooms) {
       if (state.theatreOn)
-        strip_chunk(state.theatre, 0, THEATRE_PIXELS);
+        strip_chunk(state.theatre, theatreStrip);
       else
-        strip_chunk_off(0, THEATRE_PIXELS);
+        theatreStrip.clear();
 
       if (state.gameroomOn)
-        strip_chunk(state.gameroom, THEATRE_PIXELS, GAMEROOM_PIXELS);
+        strip_chunk(state.gameroom, gameroomStrip);
       else
-        strip_chunk_off(THEATRE_PIXELS, GAMEROOM_PIXELS);
+        gameroomStrip.clear();
     }
     else {
-      strip_chunk(state.theatre, 0, GAMEROOM_PIXELS + THEATRE_PIXELS);
+      strip_chunk(state.theatre, wholeroomStrip);
     }
   }
 
-
-
-  //  uint32_t c;
-  //
-  //  c = strip.Color(state.theatre.color.r, state.theatre.color.g, state.theatre.color.b);
-  //  for(int i = 0; i<THEATRE_PIXELS; i++) {
-  //    strip.setPixelColor(i, c);
-  //  }
-  //
-  //  c = strip.Color(state.gameroom.color.r, state.gameroom.color.g, state.gameroom.color.b);
-  //  for(int i = 0; i<GAMEROOM_PIXELS; i++) {
-  //    strip.setPixelColor(THEATRE_PIXELS+i, c);
-  //  }
-
-
-  strip.show();
-
+  outputStrip.show();
 }
 
 inline unsigned lim(double f) {
-  if(f>=255) return 255;
-  if(f<=0) return 0;
+  if (f >= 255) return 255;
+  if (f <= 0) return 0;
   return (unsigned) f;
 }
 
-void strip_chunk(RoomState& room, int start, int len) {
+void strip_chunk(RoomState& room, Strip& strip) {
   uint32_t c;
 
   double rstart = (unsigned)room.color1.r;
@@ -83,38 +114,31 @@ void strip_chunk(RoomState& room, int start, int len) {
   double bstart = (unsigned)room.color1.b;
   double brange = ((double)(unsigned)room.color2.b - (double)(unsigned)room.color1.g);
 
+  const int len = strip.getLength();
   for (int i = 0; i < len; i++) {
-    double dd = (double)i / (double)(len-1);
-    c = strip.Color(
+    double dd = (double)i / (double)(len - 1);
+    c = outputStrip.Color(
           lim(rstart + rrange * dd),
           lim(gstart + grange * dd),
           lim(bstart + brange * dd)
         );
-    strip.setPixelColor(start + i, c);
+    strip.set(i, c);
   }
 
 }
 
-void strip_chunk_off(int start, int len) {
-  uint32_t c = 0;
-
-  for (int i = 0; i < len; i++) {
-    strip.setPixelColor(start + i, c);
-  }
-
-}
 
 // Input a value 0 to 255 to get a color value.
 // The colours are a transition r - g - b - back to r.
 uint32_t Wheel(byte WheelPos) {
   WheelPos = 255 - WheelPos;
   if (WheelPos < 85) {
-    return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+    return outputStrip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
   }
   if (WheelPos < 170) {
     WheelPos -= 85;
-    return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+    return outputStrip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
   }
   WheelPos -= 170;
-  return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  return outputStrip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 }

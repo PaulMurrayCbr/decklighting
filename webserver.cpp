@@ -47,16 +47,26 @@ char content[] =
    <form action="http://192.168.0.14/tworoomsonoff"><input type="submit" value="One Room/Two Rooms"></form>
 </div>
 <div class="main">
- <form action="http://192.168.0.14/theatre">
  Theatre
+ <form action="http://192.168.0.14/theatre">
+  <input type="hidden" name="color1" value="#FFF0E0">
+  <input type="hidden" name="color2" value="#FFF0E0">
+  <input type="submit" value="ALL WHITE">
+ </form>
+ <form action="http://192.168.0.14/theatre">
   <div><label for="theatre-color1">Colour 1 <input type="color" id="theatre-color1" name="color1" value="#theac1"></label></div>
   <div><label for="theatre-color2">Colour 2 <input type="color" id="theatre-color2" name="color2" value="#theac2"></label></div>
   <div><input type="submit" value="Set"></div>
  </form>
 </div>
 <div class="main">
- <form action="http://192.168.0.14/gameroom">
   Game Room
+ <form action="http://192.168.0.14/gameroom">
+  <input type="hidden" name="color1" value="#FFF0E0">
+  <input type="hidden" name="color2" value="#FFF0E0">
+  <input type="submit" value="ALL WHITE">
+ </form>
+ <form action="http://192.168.0.14/gameroom">
   <div><label for="gameroom-color1">Colour 1 <input type="color" id="gameroom-color1" name="color1" value="#grooc1"></label></div>
   <div><label for="gameroom-color2">Colour 2 <input type="color" id="gameroom-color2" name="color2" value="#grooc2"></label></div>
   <div><input type="submit" value="Set"></div>
@@ -66,6 +76,17 @@ char content[] =
  <form action="http://192.168.0.14/global">
   <div><label for="brightness">Brightness <input type="number" id="brightness" name="brightness" value="*BR"></label><input type="submit" value="Set"></div>
  </form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="192"><input type="submit" value="192"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="128"><input type="submit" value="128"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="64"><input type="submit" value="64"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="32"><input type="submit" value="32"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="16"><input type="submit" value="16"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="8"><input type="submit" value="8"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="5"><input type="submit" value="5"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="4"><input type="submit" value="4"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="3"><input type="submit" value="3"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="2"><input type="submit" value="2"></form>
+ <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="1"><input type="submit" value="1"></form>
 </div>
 </body></html>
 )zzzz";
