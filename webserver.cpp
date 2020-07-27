@@ -69,8 +69,8 @@ char content[] =
 <div class="main">
  Theatre
  <form action="http://192.168.0.14/theatre">
-  <input type="hidden" name="color1" value="#FFF0E0">
-  <input type="hidden" name="color2" value="#FFF0E0">
+  <input type="hidden" name="color1" value="#FFB090">
+  <input type="hidden" name="color2" value="#FFB090">
   <input type="submit" value="ALL WHITE">
  </form>
  <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="1"><input type="submit" value="all on"></form>
@@ -86,8 +86,8 @@ char content[] =
 <div class="main">
   Game Room
  <form action="http://192.168.0.14/gameroom">
-  <input type="hidden" name="color1" value="#FFF0E0">
-  <input type="hidden" name="color2" value="#FFF0E0">
+  <input type="hidden" name="color1" value="#FFB090">
+  <input type="hidden" name="color2" value="#FFB090">
   <input type="submit" value="ALL WHITE">
  </form>
  <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="1"><input type="submit" value="all on"></form>

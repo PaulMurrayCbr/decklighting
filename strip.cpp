@@ -5,10 +5,10 @@
 #include "clock.h"
 #include "strip.h"
 
-//const int GAMEROOM_PIXELS = 421;
-//const int THEATRE_PIXELS = 706;
-const int GAMEROOM_PIXELS = 50;
-const int THEATRE_PIXELS = 50;
+const int GAMEROOM_PIXELS = 421;
+const int THEATRE_PIXELS = 706;
+//const int GAMEROOM_PIXELS = 50;
+//const int THEATRE_PIXELS = 50;
 
 void strip_chunk(RoomState& room, Strip& strip);
 void strip_static_effect(RoomState& room, Strip& strip);
