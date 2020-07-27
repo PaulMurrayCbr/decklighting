@@ -2,7 +2,6 @@
 #include <Adafruit_NeoPixel.h>
 
 #include "decklighting.h"
-#include "clock.h"
 #include "strip.h"
 
 const int GAMEROOM_PIXELS = 421;

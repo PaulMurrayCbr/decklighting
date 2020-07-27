@@ -8,7 +8,6 @@
 #include "decklighting.h"
 #include "webserver.h"
 #include "passwords.h"
-#include "clock.h"
 #include "favicon.h"
 #include "strip.h"
 

@@ -1,11 +1,6 @@
 #ifndef DECKLIGHTING_H
 #define DECKLIGHTING_H
 
-#include "RTC2.h"
-
-void toJson(DateTime2 & dt);
-extern char json[];
-
 class RGB {
   public:
   unsigned char r,g,b;  
