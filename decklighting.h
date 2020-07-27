@@ -10,6 +10,10 @@ class RGB {
 
 enum Effect { STATIC };
 
+enum Interpolation {
+  LINEAR, HUEUP, HUEDOWN, HUENEAR, HUEFAR  
+};
+
 class RoomState {
   public:
   RGB color1;
@@ -17,6 +21,7 @@ class RoomState {
 
   int density = 1;
   Effect effect = STATIC;
+  Interpolation interpolation = LINEAR;
   
   RoomState(int r, int g, int b) : color1(r,g,b), color2(r,g,b) {}
 };

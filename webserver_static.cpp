@@ -27,7 +27,11 @@ char staticEffectContent[] =
   <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
   <script>
+    var currentinterp = "VALUEVALUEVALUE_INTERP";
+  
     $( function() {
+      $("#" + currentinterp).prop("checked", true);
+      
       $("#color1").change(function() {
         $("#colorform").submit();
       });
@@ -57,7 +61,16 @@ char staticEffectContent[] =
   <div><label for="color2">Colour 2 <input type="color" id="color2" name="color2" value="VALUEVALUEVALUE_COLOR2"></label></div>
   <div><input type="submit" value="Set"></div>
  </form>
+
+  <form style="display: inline-block" action="http://192.168.0.14/effect/static/setinterpolation"><input type="hidden" name="interpolation" value="linear"><input type="submit" value="Linear"></form>
+  <form style="display: inline-block" action="http://192.168.0.14/effect/static/setinterpolation"><input type="hidden" name="interpolation" value="hueup"><input type="submit" value="Hue Up"></form>
+  <form style="display: inline-block" action="http://192.168.0.14/effect/static/setinterpolation"><input type="hidden" name="interpolation" value="huedown"><input type="submit" value="Hue Down"></form>
+  <form style="display: inline-block" action="http://192.168.0.14/effect/static/setinterpolation"><input type="hidden" name="interpolation" value="huenear"><input type="submit" value="Hue Near"></form>
+  <form style="display: inline-block" action="http://192.168.0.14/effect/static/setinterpolation"><input type="hidden" name="interpolation" value="huefar"><input type="submit" value="Hue Far"></form>
+
  </div>
+
+ 
 </body></html>
 )zzzz";
 
@@ -69,6 +82,7 @@ char *static_color_1;
 char *static_color_2;
 
 void handleStaticSetcolor();
+void handleStaticSetinterpolation();
 void redirectToStaticEffect();
 
 void  setupStaticEffect() {
@@ -92,7 +106,7 @@ void  setupStaticEffect() {
   static_color_2 += 2;
 
   server.on("/effect/static/setcolor", handleStaticSetcolor);
-
+  server.on("/effect/static/setinterpolation", handleStaticSetinterpolation);
   
 }
 
@@ -107,7 +121,7 @@ void handleStaticEffect() {
   memset(static_room_2, ' ', 23);
   memcpy(static_room_1, effectroomstringwithquotes, strlen(effectroomstringwithquotes));
   memcpy(static_room_2, effectroomstringwithquotes, strlen(effectroomstringwithquotes));
-
+  
   server.send(200, "text/html", staticEffectContent); // Send HTTP status 200 (Ok) and send some text to the browser/client
   memset(staticMsg, ' ', 120);
 
@@ -153,6 +167,44 @@ void handleStaticSetcolor() {
   sprintf(staticMsg, "%s updated", effectroomstringwithoutquotes);
   staticMsg[strlen(staticMsg)] = ' ';
    
+  redirectToStaticEffect();
+  
+}
+
+
+void handleStaticSetinterpolation() {
+  boolean update = false;
+  for(int i = 0; i< server.args(); i++) {
+    const char *arg = server.arg(i).c_str();
+   const char *argName = server.argName(i).c_str();
+
+    if(strcmp(argName, "interpolation")==0) {
+      if(strcmp(arg, "linear")==0) {
+        effectRoom->interpolation = LINEAR;
+      }
+      else if(strcmp(arg, "hueup")==0) {
+        effectRoom->interpolation = HUEUP;
+      }
+      else if(strcmp(arg, "huedown")==0) {
+        effectRoom->interpolation = HUEDOWN;
+      }
+      else if(strcmp(arg, "huenear")==0) {
+        effectRoom->interpolation = HUENEAR;
+      }
+      else if(strcmp(arg, "huefar")==0) {
+        effectRoom->interpolation = HUEFAR;
+      }
+      
+      memset(staticMsg, ' ', 120);
+      sprintf(staticMsg, "interpolation set to %s", arg);
+      staticMsg[strlen(staticMsg)] = ' ';
+
+      update = true;
+    }
+  }  
+
+  if(update) strip_update();  
+
   redirectToStaticEffect();
   
 }
