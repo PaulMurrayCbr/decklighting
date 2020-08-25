@@ -1,6 +1,13 @@
 #ifndef DECKLIGHTING_H
 #define DECKLIGHTING_H
 
+extern char page[];
+extern char *pagep;
+extern char msg[];
+inline void boppage() {
+      while(*pagep) pagep++;
+}
+
 class RGB {
   public:
   unsigned char r,g,b;  

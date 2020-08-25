@@ -19,8 +19,6 @@ extern RoomState *effectRoom;
 extern char *effectroomstringwithquotes;
 extern char *effectroomstringwithoutquotes;
 
-extern char *msg;
-
 char staticEffectContent[] =
   R"zzzz(<html><head>
   <meta name="viewport" content="width=device-width, initial-scale=1"> 

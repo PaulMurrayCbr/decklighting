@@ -4,6 +4,10 @@
 
 State state;
 
+char page[15000];
+char *pagep;
+char msg[130];
+
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
@@ -14,6 +18,7 @@ void setup() {
 }
 
 void loop(void) {
+  pagep = page;
   webserver_loop();
   strip_loop();
   wdt_reset();

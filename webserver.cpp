@@ -34,8 +34,14 @@ void handleStaticEffect();
 void setupAlternateEffect();
 void handleAlternateEffect();
 
+char *strcat(char *b, const __FlashStringHelper *P) {
+  char *p = (char *)(void *)P;
+  while (*b) b++;
+  while (*b++ = pgm_read_byte_near(p++));
+  return b - 1;
+}
 
-char content[] =
+const char _SECTION1[] PROGMEM =
   R"zzzz(<html><head>
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
@@ -62,58 +68,24 @@ char content[] =
   .main { border: thin solid gray; margin: 2px; padding: .5em;} 
   </style>
   </head><body>
-<p>012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789  </p>
+<p>)zzzz";
+
+const char _SECTION2[] PROGMEM =
+  R"zzzz(</p>
 <div class="main">
  <form action="http://192.168.0.14/allonoff"><input type="submit" value="On/Off"></form>
  <form action="http://192.168.0.14/theatreonoff"><input type="submit" value="Theatre On/Off"></form>
  <form action="http://192.168.0.14/gameroomonoff"><input type="submit" value="Game Room On/Off"></form>
    <form action="http://192.168.0.14/tworoomsonoff"><input type="submit" value="One Room/Two Rooms"></form>
-</div>
-<div class="main">
- Theatre
- <form action="http://192.168.0.14/theatre">
-  <input type="hidden" name="color1" value="#FFB090">
-  <input type="hidden" name="color2" value="#FFB090">
-  <input type="submit" value="ALL WHITE">
- </form>
- <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="1"><input type="submit" value="all on"></form>
- <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="2"><input type="submit" value="1/2"></form>
- <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="3"><input type="submit" value="1/3"></form>
- <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="5"><input type="submit" value="1/5"></form>
- <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="7"><input type="submit" value="1/7"></form>
- <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="11"><input type="submit" value="1/11"></form>
- <form action="http://192.168.0.14/theatre" id="theatrecolorform">
-  <div><label for="theatre-color1">Colour 1 <input type="color" id="theatre-color1" name="color1" value="#theac1"></label></div>
-  <div><label for="theatre-color2">Colour 2 <input type="color" id="theatre-color2" name="color2" value="#theac2"></label></div>
-  <div><input type="submit" value="Set"></div>
- </form>
- <form  style="display: inline-block;" action="http://192.168.0.14/effect/static"><input type="hidden" name="room" value="theatre"><input type="submit" value="Static"></form>
- <form  style="display: inline-block;" action="http://192.168.0.14/effect/alternate"><input type="hidden" name="room" value="theatre"><input type="submit" value="Alternating"></form>
-</div>
-<div class="main">
-  Game Room
- <form action="http://192.168.0.14/gameroom">
-  <input type="hidden" name="color1" value="#FFB090">
-  <input type="hidden" name="color2" value="#FFB090">
-  <input type="submit" value="ALL WHITE">
- </form>
- <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="1"><input type="submit" value="all on"></form>
- <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="2"><input type="submit" value="1/2"></form>
- <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="3"><input type="submit" value="1/3"></form>
- <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="5"><input type="submit" value="1/5"></form>
- <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="7"><input type="submit" value="1/7"></form>
- <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="11"><input type="submit" value="1/11"></form>
- <form action="http://192.168.0.14/gameroom" id="gameroomcolorform">
-  <div><label for="gameroom-color1">Colour 1 <input type="color" id="gameroom-color1" name="color1" value="#grooc1"></label></div>
-  <div><label for="gameroom-color2">Colour 2 <input type="color" id="gameroom-color2" name="color2" value="#grooc2"></label></div>
-  <div><input type="submit" value="Set"></div>
- </form>
- <form  style="display: inline-block;" action="http://192.168.0.14/effect/static"><input type="hidden" name="room" value="gameroom"><input type="submit" value="Static"></form>
- <form  style="display: inline-block;" action="http://192.168.0.14/effect/alternate"><input type="hidden" name="room" value="gameroom"><input type="submit" value="Alternating"></form>
-</div>
-<div class="main">
+</div>)zzzz";
+
+const char _SECTION3[] PROGMEM =
+  R"zzzz(<div class="main">
  <form action="http://192.168.0.14/global">
-  <div><label for="brightness">Brightness <input type="number" id="brightness" name="brightness" value="*BR"></label><input type="submit" value="Set"></div>
+  <div><label for="brightness">Brightness <input type="number" id="brightness" name="brightness" value=")zzzz";
+
+const char _SECTION4[] PROGMEM =
+  R"zzzz("></label><input type="submit" value="Set"></div>
  </form>
  <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="192"><input type="submit" value="192"></form>
  <form action="http://192.168.0.14/global" style="display: inline-block;"><input type="hidden" name="brightness" value="128"><input type="submit" value="128"></form>
@@ -130,23 +102,89 @@ char content[] =
 </body></html>
 )zzzz";
 
+const __FlashStringHelper *SECTION1 = (const __FlashStringHelper *)_SECTION1;
+const __FlashStringHelper *SECTION2 = (const __FlashStringHelper *)_SECTION2;
+const __FlashStringHelper *SECTION3 = (const __FlashStringHelper *)_SECTION3;
+const __FlashStringHelper *SECTION4 = (const __FlashStringHelper *)_SECTION4;
+
 
 char hex[] = "0123456789ABCDEF";
 
 char encodehex(unsigned n) { return hex[n&15]; }
 int decodehex(char c) { if(c>='a') c-='a'-'A';return  strchr(hex,c)-hex; }
 
+const int jump[] = {1,2,3,4,5,7,11,13};
+
 class RoomStateHandler {
   public:
   RoomState& rs;
-  char *color1;
-  char *color2;
 
   RoomStateHandler(RoomState& rs) : rs(rs) {}
 
-  void writeState() {
-    writeColor(rs.color1, color1);
-    writeColor(rs.color2, color2);
+
+  void writeState(const char *title, const char *key) {
+    pagep = strcat(pagep, F("<div class=\"main\">"));
+    pagep = strcat(pagep, title);
+    pagep = strcat(pagep, F(" <form action=\"http://192.168.0.14/")); pagep = strcat(pagep, key); strcat(pagep, F("\">"));
+    pagep = strcat(pagep, F("  <input type=\"hidden\" name=\"color1\" value=\"#FFB090\">"));
+    pagep = strcat(pagep, F("  <input type=\"hidden\" name=\"color2\" value=\"#FFB090\">"));
+    pagep = strcat(pagep, F("  <input type=\"submit\" value=\"ALL WHITE\">"));
+    pagep = strcat(pagep, F(" </form>"));
+  
+    for(int i = 0; i<sizeof(jump)/sizeof(*jump);i++) {
+      pagep = strcat(pagep, F(" <form action=\"http://192.168.0.14/")); 
+      pagep = strcat(pagep, key); 
+      pagep = strcat(pagep, F("\" style=\"display: inline-block;\"><input type=\"hidden\" name=\"density\" value=\""));
+      boppage();
+      itoa(jump[i], pagep, 10);
+      boppage();
+      pagep = strcat(pagep, F("\"><input type=\"submit\" value=\""));
+      if(jump[i]==1) {
+        pagep=strcat(pagep, "all on");
+      }
+      else {
+        pagep = strcat(pagep, "1/");
+        boppage();
+        itoa(jump[i], pagep, 10);
+        boppage();
+      }
+    pagep = strcat(pagep, F("\"></form>"));
+    }
+    
+    pagep = strcat(pagep, F(" <form action=\"http://192.168.0.14/")); 
+    pagep = strcat(pagep, key); 
+    pagep = strcat(pagep, F("\" id=\"")); 
+    pagep = strcat(pagep, key); 
+    pagep = strcat(pagep, F("colorform\">"));
+    pagep = strcat(pagep, F("  <div><label for=\""));
+    pagep = strcat(pagep, key); 
+    pagep = strcat(pagep, F("-color1\">Colour 1 <input type=\"color\" id=\"")); 
+    pagep = strcat(pagep, key); 
+    pagep = strcat(pagep, F("-color1\" name=\"color1\" value=\"#"));
+    boppage();
+    writeColor(rs.color1, pagep);
+    pagep += 6;
+    *pagep = '\0';
+    pagep = strcat(pagep, F("\"></label></div>"));
+    pagep = strcat(pagep, F("  <div><label for=\"")); 
+    pagep = strcat(pagep, key); 
+    pagep = strcat(pagep, F("-color2\">Colour 2 <input type=\"color\" id=\"")); 
+    pagep = strcat(pagep, key); 
+    pagep = strcat(pagep, F("-color2\" name=\"color2\" value=\"#"));
+    boppage();
+    writeColor(rs.color2, pagep);
+    pagep += 6;
+    *pagep = '\0';
+    pagep = strcat(pagep, F("\"></label></div>"));
+    pagep = strcat(pagep, F("  <div><input type=\"submit\" value=\"Set\"></div>"));
+    pagep = strcat(pagep, F(" </form>"));
+    pagep = strcat(pagep, F(" <form  style=\"display: inline-block;\" action=\"http://192.168.0.14/effect/static\"><input type=\"hidden\" name=\"room\" value=\"")); 
+    pagep = strcat(pagep, key); 
+    pagep = strcat(pagep, F("\"><input type=\"submit\" value=\"Static\"></form>"));
+    pagep = strcat(pagep, F(" <form  style=\"display: inline-block;\" action=\"http://192.168.0.14/effect/alternate\"><input type=\"hidden\" name=\"room\" value=\"")); 
+    pagep = strcat(pagep, key); 
+    pagep = strcat(pagep, F("\"><input type=\"submit\" value=\"Alternating\"></form>"));
+    pagep = strcat(pagep, F("</div>"));
   }
 
   void readHttp()  {
@@ -182,21 +220,7 @@ class RoomStateHandler {
 } gameroom(state.gameroom), theatre(state.theatre);
 
 
-char *brightnessP;
-char *msg;
-
-
 void webserver_setup() {
-
-  gameroom.color1 = strstr(content, "grooc1");
-  gameroom.color2 = strstr(content, "grooc2");
-  theatre.color1 = strstr(content, "theac1");
-  theatre.color2 = strstr(content, "theac2");
-
-  brightnessP = strstr(content, "*BR");
-  msg = strstr(content, "0123456789");
-  memset(msg, ' ', 120);
-
   setupStaticEffect();
   setupAlternateEffect();
   
@@ -253,16 +277,23 @@ void webserver_loop() {
 }
 
 void handleRoot() {
-  gameroom.writeState();
-  theatre.writeState();
-
-  brightnessP[0] = (state.brightness / 100) % 10 + '0';
-  brightnessP[1] = (state.brightness / 10) % 10 + '0';
-  brightnessP[2] = (state.brightness / 1) % 10 + '0';
+  pagep = page;
+  *pagep = '\0';
+  pagep = strcat(pagep, SECTION1);
+  pagep = strcat(pagep, msg);
+  pagep = strcat(pagep, SECTION2);
+  theatre.writeState("Theatre", "theatre");
+  gameroom.writeState("Game Room", "gameroom");
+  pagep = strcat(pagep, SECTION3);
+  boppage();
+  itoa(state.brightness, pagep, 10);
+  boppage();
+  pagep = strcat(pagep, SECTION4);
     
-  server.send(200, "text/html", content); // Send HTTP status 200 (Ok) and send some text to the browser/client
+  server.send(200, "text/html", page); // Send HTTP status 200 (Ok) and send some text to the browser/client
 
   memset(msg, ' ', 120);
+  msg[0] = '\0';
 }
 
 void writeColor(RGB& color, char* p) {
