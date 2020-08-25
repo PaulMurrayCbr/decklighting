@@ -12,6 +12,7 @@ const int THEATRE_PIXELS = 706;
 
 void strip_chunk(RoomState& room, Strip& strip);
 void strip_static_effect(RoomState& room, Strip& strip);
+void strip_alternate_effect(RoomState& room, Strip& strip);
 
 Adafruit_NeoPixel outputStrip = Adafruit_NeoPixel(GAMEROOM_PIXELS + THEATRE_PIXELS, D8, NEO_GRB + NEO_KHZ800);
 
@@ -230,6 +231,9 @@ void strip_chunk(RoomState& room, Strip& strip) {
     case STATIC:
       strip_static_effect(room, strip);
       break;
+    case ALTERNATE:
+      strip_alternate_effect(room, strip);
+      break;
   }
 }
 
@@ -264,18 +268,6 @@ void strip_static_effect(RoomState& room, Strip& strip) {
     rgb rgb2;
     hsv hsv1;
     hsv hsv2;
-
-    Serial.print(" room "); Serial.println((int) &room);
-
-    Serial.print(" 1r "); Serial.print(room.color1.r);
-    Serial.print(" 1g "); Serial.print(room.color1.g);
-    Serial.print(" 1b "); Serial.print(room.color1.b);
-
-    Serial.print(" 2r "); Serial.print(room.color2.r);
-    Serial.print(" 2g "); Serial.print(room.color2.g);
-    Serial.print(" 2b "); Serial.println(room.color2.b);
-
-
 
     rgb1.r = room.color1.r / 255.0;
     rgb1.g = room.color1.g / 255.0;
@@ -335,18 +327,14 @@ void strip_static_effect(RoomState& room, Strip& strip) {
 
 }
 
+void strip_alternate_effect(RoomState& room, Strip& strip) {
 
-// Input a value 0 to 255 to get a color value.
-// The colours are a transition r - g - b - back to r.
-uint32_t Wheel(byte WheelPos) {
-  WheelPos = 255 - WheelPos;
-  if (WheelPos < 85) {
-    return outputStrip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  const int len = strip.getLength();
+  uint32_t cp[2];
+  cp[0] = outputStrip.Color(room.color1.r, room.color1.g, room.color1.b);
+  cp[1] = outputStrip.Color(room.color2.r, room.color2.g, room.color2.b);
+
+  for (int i = 0; i < len; i++) {
+    strip.set(i, cp[i & 1]);
   }
-  if (WheelPos < 170) {
-    WheelPos -= 85;
-    return outputStrip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
-  }
-  WheelPos -= 170;
-  return outputStrip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 }

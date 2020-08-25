@@ -31,6 +31,10 @@ void handleTworoomsOnOff();
 void setupStaticEffect();
 void handleStaticEffect();
 
+void setupAlternateEffect();
+void handleAlternateEffect();
+
+
 char content[] =
   R"zzzz(<html><head>
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -73,14 +77,18 @@ char content[] =
   <input type="submit" value="ALL WHITE">
  </form>
  <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="1"><input type="submit" value="all on"></form>
- <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="2"><input type="submit" value="alternate"></form>
- <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="3"><input type="submit" value="one in 3"></form>
+ <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="2"><input type="submit" value="1/2"></form>
+ <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="3"><input type="submit" value="1/3"></form>
+ <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="5"><input type="submit" value="1/5"></form>
+ <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="7"><input type="submit" value="1/7"></form>
+ <form action="http://192.168.0.14/theatre" style="display: inline-block;"><input type="hidden" name="density" value="11"><input type="submit" value="1/11"></form>
  <form action="http://192.168.0.14/theatre" id="theatrecolorform">
   <div><label for="theatre-color1">Colour 1 <input type="color" id="theatre-color1" name="color1" value="#theac1"></label></div>
   <div><label for="theatre-color2">Colour 2 <input type="color" id="theatre-color2" name="color2" value="#theac2"></label></div>
   <div><input type="submit" value="Set"></div>
  </form>
- <form action="http://192.168.0.14/effect/static"><input type="hidden" name="room" value="theatre"><input type="submit" value="Static"></form>
+ <form  style="display: inline-block;" action="http://192.168.0.14/effect/static"><input type="hidden" name="room" value="theatre"><input type="submit" value="Static"></form>
+ <form  style="display: inline-block;" action="http://192.168.0.14/effect/alternate"><input type="hidden" name="room" value="theatre"><input type="submit" value="Alternating"></form>
 </div>
 <div class="main">
   Game Room
@@ -90,14 +98,18 @@ char content[] =
   <input type="submit" value="ALL WHITE">
  </form>
  <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="1"><input type="submit" value="all on"></form>
- <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="2"><input type="submit" value="alternate"></form>
- <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="3"><input type="submit" value="one in 3"></form>
+ <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="2"><input type="submit" value="1/2"></form>
+ <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="3"><input type="submit" value="1/3"></form>
+ <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="5"><input type="submit" value="1/5"></form>
+ <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="7"><input type="submit" value="1/7"></form>
+ <form action="http://192.168.0.14/gameroom" style="display: inline-block;"><input type="hidden" name="density" value="11"><input type="submit" value="1/11"></form>
  <form action="http://192.168.0.14/gameroom" id="gameroomcolorform">
   <div><label for="gameroom-color1">Colour 1 <input type="color" id="gameroom-color1" name="color1" value="#grooc1"></label></div>
   <div><label for="gameroom-color2">Colour 2 <input type="color" id="gameroom-color2" name="color2" value="#grooc2"></label></div>
   <div><input type="submit" value="Set"></div>
  </form>
- <form action="http://192.168.0.14/effect/static"><input type="hidden" name="room" value="gameroom"><input type="submit" value="Static"></form>
+ <form  style="display: inline-block;" action="http://192.168.0.14/effect/static"><input type="hidden" name="room" value="gameroom"><input type="submit" value="Static"></form>
+ <form  style="display: inline-block;" action="http://192.168.0.14/effect/alternate"><input type="hidden" name="room" value="gameroom"><input type="submit" value="Alternating"></form>
 </div>
 <div class="main">
  <form action="http://192.168.0.14/global">
@@ -186,6 +198,7 @@ void webserver_setup() {
   memset(msg, ' ', 120);
 
   setupStaticEffect();
+  setupAlternateEffect();
   
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
@@ -223,6 +236,7 @@ void webserver_setup() {
   server.on("/tworoomsonoff", handleTworoomsOnOff);
 
   server.on("/effect/static", handleStaticEffect);
+  server.on("/effect/alternate", handleAlternateEffect);
 
   
   server.onNotFound([]() {
@@ -406,5 +420,22 @@ void readEffectRoom() {
       effectroomstringwithquotes = "\"gameroom\"";
     }
   }
+
+}
+
+
+void  setupAlternateEffect() {
+}
+
+void handleAlternateEffect() {
+  readEffectRoom();
+  
+  effectRoom->effect = ALTERNATE;
+  strip_update();
+  memset(msg, ' ', 120);
+  sprintf(msg,  "Alternate effect selected");
+  msg[strlen(msg)] = ' ';
+  
+  redirectToRoot();
 
 }

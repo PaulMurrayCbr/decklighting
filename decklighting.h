@@ -8,7 +8,7 @@ class RGB {
   RGB() : RGB(64,64,192) { }
 };
 
-enum Effect { STATIC };
+enum Effect { STATIC, ALTERNATE };
 
 enum Interpolation {
   LINEAR, HUEUP, HUEDOWN, HUENEAR, HUEFAR  

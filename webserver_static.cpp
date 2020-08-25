@@ -70,7 +70,7 @@ char staticEffectContent[] =
 
  </div>
 
- 
+
 </body></html>
 )zzzz";
 
@@ -114,6 +114,9 @@ void  setupStaticEffect() {
 void handleStaticEffect() {
   readEffectRoom();
 
+  effectRoom->effect = STATIC;
+  strip_update();
+  
   writeColor(effectRoom->color1, static_color_1);
   writeColor(effectRoom->color2, static_color_2);
 
