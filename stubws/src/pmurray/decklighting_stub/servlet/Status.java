@@ -26,7 +26,15 @@ public class Status extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		response.setContentType("application/json");
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Method", "GET, POST");
 		Writer w = response.getWriter();
 		if ("all".equals(request.getParameter("room")))
 			sendMaster(w);
