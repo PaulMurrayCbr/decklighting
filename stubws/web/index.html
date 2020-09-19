@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+Hello, World!
+
+<dl>
+<dt>/on?room=all/1/2/3/4/5&brigthness=n</dt>
+<dt>/off?room=all/1/2/3/4/5&brigthness=n</dt>
+<dt>/out?room=2/3/4/5&brigthness=n</dt>
+<dt>/density?room=_&value=_</dt>
+<dt>/color?room=_&select=1/2&rgb=#ABCDEF</dt>
+<dt>/interp?room=_&method=linear|hueup|huedown|huenear|huefar</dt>
+<dt>/effect?room=_&effect=rainbow|theatre|</dt>
+<dd>room "all" returns { status: on/off/out; brightness: n; }</dd>
+<dd>room 1-5 return { status: on/off/out; density: n; c1=rgb; c2=rgb; interp=_; effect=_; }</dd>
+</dl>
+
+
+</body>
+</html>
