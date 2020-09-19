@@ -5,7 +5,8 @@
 #include "strip.h"
 #include "rgb.h"
 
-const int GAMEROOM_PIXELS = 421;
+//const int GAMEROOM_PIXELS = 421;
+const int GAMEROOM_PIXELS = 440;
 const int THEATRE_PIXELS = 706;
 //const int GAMEROOM_PIXELS = 30;
 //const int THEATRE_PIXELS = 75;
