@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Master
  */
-@WebServlet({ "/on", "/off", "/out", "/density", "/colour", "/interp", "/effect" })
+@WebServlet({ "/on", "/off", "/out", "/density", "/colour", "/interp", "/effect", "/brightness", "/" })
 
 public class Status extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class Status extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +52,7 @@ public class Status extends HttpServlet {
 		w.write("{ \"status\": \"");
 		w.write(st[rnd.nextInt(2)]);
 		w.write("\", \"brightness\": ");
-		w.write(Integer.toString(rnd.nextInt(256)));
+		w.write(Integer.toString(rnd.nextInt(10)));
 		w.write("}");
 	}
 

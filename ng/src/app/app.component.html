@@ -1,6 +1,149 @@
-<p>
-Hello, World!
-</p>
-<p>
-Data is {{data | json}}
-</p>
+<div class="container-fluid">
+	<div class="row">
+		<h1 class="col-12">Paul's Funky Lighting</h1>
+	</div>
+	<div class="row">
+		<span class="btn-group col-10">
+			<button type="button" class="btn btn-outline-primary"
+				(click)="tab = 0" [ngClass]="{active: tab==0}">Main</button>
+			<button type="button" class="btn btn-outline-primary"
+				(click)="tab = 1" [ngClass]="{active: tab==1}">Entrance</button>
+			<button type="button" class="btn btn-outline-primary"
+				(click)="tab = 2" [ngClass]="{active: tab==2}">Game Room</button>
+			<button type="button" class="btn btn-outline-primary"
+				(click)="tab = 3" [ngClass]="{active: tab==3}">Theatre</button>
+			<button type="button" class="btn btn-outline-primary"
+				(click)="tab = 4" [ngClass]="{active: tab==4}">Deck</button>
+			<button type="button" class="btn btn-outline-primary"
+				(click)="tab = 5" [ngClass]="{active: tab==5}">Back Wall</button>
+		</span>
+		<span class="btn-group col-2">
+			<button type="button" class="btn btn-dark"
+				(click)="refresh()">&#x27f3;</button>
+		</span>		
+	</div>
+
+	<div *ngIf="tab==0">
+		<div class="row">
+					<span class="btn-group col-12">
+				<button type="button" class="btn btn-primary col-12"
+					(click)="allOff()" [ngClass]="{active: data.master.status=='off'}">All Off</button>
+					</span>
+		</div>
+		<div class="row">
+			<span class="btn-group col-12">
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(1)" [ngClass]="{active: isBr(1)}">1</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(2)" [ngClass]="{active: isBr(2)}">2</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(3)" [ngClass]="{active: isBr(3)}">3</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(4)" [ngClass]="{active: isBr(4)}">4</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(5)" [ngClass]="{active: isBr(5)}">5</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(6)" [ngClass]="{active: isBr(6)}">6</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(7)" [ngClass]="{active: isBr(7)}">7</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(8)" [ngClass]="{active: isBr(8)}">8</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(16)" [ngClass]="{active: isBr(16)}">16</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(32)" [ngClass]="{active: isBr(32)}">32</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(64)" [ngClass]="{active: isBr(64)}">64</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(128)" [ngClass]="{active: isBr(128)}">128</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="br(192)" [ngClass]="{active: isBr(192)}">192</button>
+			</span>
+		</div>
+		
+		<div class="row">
+			<span class="col-4">Entrance</span>
+			<span class="btn-group col-8">
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="off(1)" [ngClass]="{active: isOff(1)}">Off</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="on(1)" [ngClass]="{active: isOn(1)}">On</button>
+				<button type="button" class="btn btn-sm btn-outline-primary disabled" (click)="out(1)" [ngClass]="{active: isOut(1)}">Out</button>
+			</span>
+		</div>
+		<div class="row">
+			<span class="col-4">Game Room</span>
+			<span class="btn-group col-8">
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="off(2)" [ngClass]="{active: isOff(2)}">Off</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="on(2)" [ngClass]="{active: isOn(2)}">On</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="out(2)" [ngClass]="{active: isOut(2)}">Out</button>
+			</span>
+		</div>
+		<div class="row">
+			<span class="col-4">Theatre</span>
+			<span class="btn-group col-8">
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="off(3)" [ngClass]="{active: isOff(3)}">Off</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="on(3)" [ngClass]="{active: isOn(3)}">On</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="out(3)" [ngClass]="{active: isOut(3)}">Out</button>
+			</span>
+		</div>
+		<div class="row">
+			<span class="col-4">Deck</span>
+			<span class="btn-group col-8">
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="off(4)" [ngClass]="{active: isOff(4)}">Off</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="on(4)" [ngClass]="{active: isOn(4)}">On</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="out(4)" [ngClass]="{active: isOut(4)}">Out</button>
+			</span>
+		</div>
+		<div class="row">
+			<span class="col-4">Back Wall</span>
+			<span class="btn-group col-8">
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="off(5)" [ngClass]="{active: isOff(5)}">Off</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="on(5)" [ngClass]="{active: isOn(5)}">On</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="out(5)" [ngClass]="{active: isOut(5)}">Out</button>
+			</span>
+		</div>
+		<pre>{{data.master | json}}</pre>
+	</div>
+
+	<div *ngIf="tab!=0">
+		<div class="row">
+			<span class="btn-group col-12">
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="roomTab='state'" [ngClass]="{active: roomTab=='state'}">State</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="roomTab='colour'" [ngClass]="{active: roomTab=='colour'}">Colour</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="roomTab='effect'" [ngClass]="{active: roomTab=='effect'}">Effect</button>
+			</span>
+		</div>
+	
+		<div *ngIf="roomTab=='state'">
+		<div class="row">
+			<span class="btn-group col-12">
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="off(tab)" [ngClass]="{active: isOff(tab)}">Off</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="on(tab)" [ngClass]="{active: isOn(tab)}">On</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="out(tab)" [ngClass]="{active: isOut(tab), disabled:tab==1}">Out</button>
+			</span>
+		</div>
+		</div>
+	
+		<div *ngIf="roomTab=='colour'">
+		<div class="row">
+			<span class="col-4">Primary Colour</span>
+			<input (change)="console.log('color1')" class="col-2" type="color" [(ngModel)]="data.room[tab].c1">
+			<span class="col-4">Secondary Colour</span>
+			<input (change)="console.log('color2')" class="col-2" type="color" [(ngModel)]="data.room[tab].c2">
+		</div>
+		</div>
+	
+		<div *ngIf="roomTab=='effect'">
+		<div class="row">
+			<span class="btn-group col-12">
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="effect('rainbow')" [ngClass]="{active: data.room[tab].effect=='rainbow'}">Rainbow</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="effect('theatre')" [ngClass]="{active: data.room[tab].effect=='theatre'}">Theatre</button>
+				<button type="button" class="btn btn-sm btn-outline-primary" (click)="effect('plasma')" [ngClass]="{active: data.room[tab].effect=='plasma'}">Plasma</button>
+			</span>
+		</div>
+		</div>
+		
+	
+		<pre>{{data.room[tab] | json}}</pre>
+	</div>
+
+</div>
