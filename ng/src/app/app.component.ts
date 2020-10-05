@@ -13,6 +13,9 @@ class RoomUi {
 export class AppComponent {
 	title = 'ng';
 
+	c1: String ="#39efb8";
+	c2: String ="#00ff00";
+
 	data: Data;
 	tab: number = 0;
 	roomTab: String = 'state';
@@ -71,5 +74,14 @@ export class AppComponent {
 	}
 	out(n: number) {
 		return this.stripService.out(n);
+	}
+	c1change(e: Event) {
+		return this.stripService.color1(this.tab, this.data.room[this.tab].c1);
+	}
+	c2change(e: Event) {
+		return this.stripService.color2(this.tab, this.data.room[this.tab].c2);
+	}
+	interpSelectChange(e: Event) {
+	  return this.stripService.interp(this.tab, this.data.room[this.tab].interp);
 	}
 }

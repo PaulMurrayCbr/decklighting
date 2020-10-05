@@ -19,6 +19,8 @@ public class Status extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	Random rnd = new Random();
+	int effectn = 0;
+
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -38,14 +40,16 @@ public class Status extends HttpServlet {
 		Writer w = response.getWriter();
 		if ("all".equals(request.getParameter("room")))
 			sendMaster(w);
-		else
+		else {
 			sendRoom(w);
+			if(++effectn>=7) effectn= 0;
+		}
 		w.flush();
 		w.close();
 	}
 
 	static String[] st = { "on", "off", "out" };
-	static String[] interp = { "linear", "hueup", "huedown", "huenear", "huefar" };
+	static String[] interp = { "linear", "hueup", "huedown", "huenear", "huefar", "huerbow", "huexrbow" };
 	static String[] effect = { "rainbow", "theatre", "plasma" };
 
 	void sendMaster(Writer w) throws IOException {
@@ -56,6 +60,7 @@ public class Status extends HttpServlet {
 		w.write("}");
 	}
 
+	
 	void sendRoom(Writer w) throws IOException {
 		// { status: on/off/out; density: n; c1=rgb; c2=rgb; interp=_; effect=_; }
 		w.write("{" //
@@ -71,9 +76,28 @@ public class Status extends HttpServlet {
 			w.write(Integer.toHexString(rnd.nextInt(16)));
 		w.write("\", \"interp\": \"");
 		w.write(interp[rnd.nextInt(3)]);
+		
 		w.write("\", \"effect\": \"");
-		w.write(effect[rnd.nextInt(3)]);
+		w.write(effect[effectn]);
 		w.write("\"");
+		
+		w.write(", \n\t\"effectData\": {");
+		
+		switch(effectn) {
+		case 0:
+			
+			
+			
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		}
+		
+		w.write("\t\t}");
+		
+		
 		w.write("}");
 	}
 

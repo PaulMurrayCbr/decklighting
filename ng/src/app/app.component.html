@@ -2,23 +2,24 @@
 	<div class="row">
 		<h1 class="col-12">Paul's Funky Lighting</h1>
 	</div>
+
 	<div class="row">
 		<span class="btn-group col-10">
-			<button type="button" class="btn btn-outline-primary"
+			<button type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 0" [ngClass]="{active: tab==0}">Main</button>
-			<button type="button" class="btn btn-outline-primary"
+			<button type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 1" [ngClass]="{active: tab==1}">Entrance</button>
-			<button type="button" class="btn btn-outline-primary"
+			<button type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 2" [ngClass]="{active: tab==2}">Game Room</button>
-			<button type="button" class="btn btn-outline-primary"
+			<button type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 3" [ngClass]="{active: tab==3}">Theatre</button>
-			<button type="button" class="btn btn-outline-primary"
+			<button type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 4" [ngClass]="{active: tab==4}">Deck</button>
-			<button type="button" class="btn btn-outline-primary"
+			<button type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 5" [ngClass]="{active: tab==5}">Back Wall</button>
 		</span>
 		<span class="btn-group col-2">
-			<button type="button" class="btn btn-dark"
+			<button type="button" class="btn btn-sm btn-dark"
 				(click)="refresh()">&#x27f3;</button>
 		</span>		
 	</div>
@@ -126,10 +127,25 @@
 		<div *ngIf="roomTab=='colour'">
 		<div class="row">
 			<span class="col-4">Primary Colour</span>
-			<input (change)="console.log('color1')" class="col-2" type="color" [(ngModel)]="data.room[tab].c1">
+			<input (change)="c1change()" class="col-2" type="color" [(ngModel)]="data.room[tab].c1">
 			<span class="col-4">Secondary Colour</span>
-			<input (change)="console.log('color2')" class="col-2" type="color" [(ngModel)]="data.room[tab].c2">
+			<input (change)="c2change()" class="col-2" type="color" [(ngModel)]="data.room[tab].c2">
 		</div>
+		<div class="row">
+			<span class="col-4">Interpolation Method</span>
+
+  <select (change)="interpSelectChange()" name="interpSelect" class="col-8" [(ngModel)]="data.room[tab].interp">
+  	<option value="linear">Cross-fade</option>
+  	<option value="huenear">Nearest</option>
+  	<option value="huefar" selected="yes">Furthest</option>
+  	<option value="huerbow">Rainbow</option>
+  	<option value="huexrbow">Antirainbow</option>
+  	<option value="hueup">ROYGBIV</option>
+  	<option value="huedown">VIBGYOR</option>
+  </select>
+			
+		</div>
+		
 		</div>
 	
 		<div *ngIf="roomTab=='effect'">
