@@ -18,6 +18,12 @@ class RGB {
     ww(v>>4, p);
     ww(v, p+1);
   }
+  inline unsigned int h(char c) {
+    if(c>='0'&&c<='9') return c-'0';
+    if(c>='a'&&c<='f') return c-'a'+10;
+    if(c>='A'&&c<='F') return c-'A'+10;
+    return 0;
+  }
   public:
   unsigned char r,g,b;  
   RGB(int rr, int gg, int bb) : r(rr), g(gg), b(bb) {}
@@ -28,6 +34,13 @@ class RGB {
     w(b, p+4);
     p[6] = '\0';
     return p+6;
+  }
+
+  void read(const String &s) {
+    const char *p = s.c_str();
+    r = (h(s[0])<<4)|(h(s[1]));
+    g = (h(s[2])<<4)|(h(s[3]));
+    b = (h(s[4])<<4)|(h(s[5]));
   }
 };
 

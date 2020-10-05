@@ -28,7 +28,8 @@ export class Data {
 })
 export class StripService {
 
-  base = "http://192.168.0.149:8080/decklighting-stub";
+  // base = "http://192.168.0.149:8080/decklighting-stub";
+  base = "http://192.168.0.14";
 
   data: Data = new Data();
 

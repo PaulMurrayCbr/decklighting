@@ -41,7 +41,7 @@ int parseIntArg(char *name) {
 
 void parseRoom() {
   room = parseIntArg("room");
-  if (room < 1 || room > 5) room=0;
+  if (room < 1 || room > 5) room = 0;
 }
 
 void webserver2_setup() {
@@ -104,56 +104,72 @@ void ws2Status() {
 void ws2On() {
   parseRoom();
 
-  if(room==0) {
+  if (room == 0) {
     state.allOn = true;
 
-    if(server2.hasArg("brightness")) {
+    if (server2.hasArg("brightness")) {
       state.brightness = parseIntArg("brightness");
-    }
-  }
-  else {
-    RoomState &r = state.room[room-1];    
-
-    r.onOffOut = ON;
-
-    if(server2.hasArg("brightness")) {
-      state.brightness = parseIntArg("brightness");
-      if(state.brightness < 0 || state.brightness > 192) {
+      if (state.brightness < 0 || state.brightness > 192) {
         state.brightness = 64;
       }
     }
-    
   }
-  
-  strip_update();  
+  else {
+    RoomState &r = state.room[room - 1];
+
+    r.onOffOut = ON;
+
+    if (server2.hasArg("density")) {
+      r.density = parseIntArg("density");
+    }
+    if (server2.hasArg("effect")) {
+      if (server2.arg("effect") == "rainbow") r.effect = STATIC;
+      if (server2.arg("effect") == "theatre") r.effect = ALTERNATE;
+      if (server2.arg("effect") == "plasma") r.effect = PLASMA;
+    }
+    if (server2.hasArg("c1")) r.color1.read(server2.arg("c1"));
+    if (server2.hasArg("c2")) r.color2.read(server2.arg("c2"));
+    if (server2.hasArg("interp")) {
+      if (server2.arg("interp") == "linear") r.interpolation = LINEAR;
+      if (server2.arg("interp") == "huenear") r.interpolation = HUENEAR;
+      if (server2.arg("interp") == "huefar") r.interpolation = HUEFAR;
+      if (server2.arg("interp") == "huerbow") r.interpolation = HUERBOW;
+      if (server2.arg("interp") == "huexrbow") r.interpolation = HUEXRBOW;
+      if (server2.arg("interp") == "hueup") r.interpolation = HUEUP;
+      if (server2.arg("interp") == "huedown") r.interpolation = HUEDOWN;
+    }
+
+  }
+
+  strip_update();
   reply();
 }
 
 void ws2Off() {
   parseRoom();
 
-  if(room==0) {
+  if (room == 0) {
     state.allOn = false;
   }
   else {
-    RoomState &r = state.room[room-1];    
+    RoomState &r = state.room[room - 1];
     r.onOffOut = OFF;
   }
-  strip_update();  
+  strip_update();
   reply();
 }
 
 void ws2Out() {
   parseRoom();
 
-  if(room==0) {
+  if (room == 0) {
     state.allOn = false;
   }
   else {
-    RoomState &r = state.room[room-1];    
+    RoomState &r = state.room[room - 1];
     r.onOffOut = OUT;
   }
-  strip_update();  
+  strip_update();
   reply();
 }
 
@@ -164,7 +180,7 @@ void reply() {
   parseRoom();
 
   if (room != 0) {
-    replyRoom(state.room[room-1]);
+    replyRoom(state.room[room - 1]);
   }
   else {
     replyAll();
