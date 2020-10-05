@@ -144,7 +144,26 @@
   	<option value="huedown">VIBGYOR</option>
   </select>
 			
+			
+			
 		</div>
+
+
+		<div class="row">
+		    <span class="col-4">Density</span>
+		
+			<span class="btn-group col-8">
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="density(1)" [ngClass]="{active: isDensity(1)}">All On</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="density(2)" [ngClass]="{active: isDensity(2)}">2</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="density(3)" [ngClass]="{active: isDensity(3)}">3</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="density(5)" [ngClass]="{active: isDensity(5)}">5</button>
+				<button type="button" class="btn btn-sm btn-outline-primary"
+					(click)="density(7)" [ngClass]="{active: isDensity(7)}">7</button>
+			</span>
 		
 		</div>
 	

@@ -84,4 +84,11 @@ export class AppComponent {
 	interpSelectChange(e: Event) {
 	  return this.stripService.interp(this.tab, this.data.room[this.tab].interp);
 	}
+	isDensity(a: number) {
+	  return this.data.room[this.tab].density == a;
+	}
+	density(a: number) {
+	  return this.stripService.density(this.tab, a);
+	}
+	
 }
