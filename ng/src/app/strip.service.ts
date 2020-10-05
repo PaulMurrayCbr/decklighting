@@ -98,22 +98,22 @@ export class StripService {
   }
   
   effect(n:number, e: String) {
-	  	this.http.get<Room>(this.base+"/effect?room="+n+"&effect="+e).subscribe(
+	  	this.http.get<Room>(this.base+"/on?room="+n+"&effect="+e).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });
   }
   
   color1(n:number, c: String) {
-	  	this.http.get<Room>(this.base+"/color?room="+n+"&select=1&c="+c.substr(1)).subscribe(
+	  	this.http.get<Room>(this.base+"/on?room="+n+"&c1="+c.substr(1)).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });
   }
   
   color2(n:number, c: String) {
-	  	this.http.get<Room>(this.base+"/color?room="+n+"&select=2&c="+c.substr(1)).subscribe(
+	  	this.http.get<Room>(this.base+"/on?room="+n+"c2="+c.substr(1)).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });
   }
 
   interp(n:number, e: String) {
-	  	this.http.get<Room>(this.base+"/interp?room="+n+"&interp="+e).subscribe(
+	  	this.http.get<Room>(this.base+"/on?room="+n+"&interp="+e).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });
   
   }

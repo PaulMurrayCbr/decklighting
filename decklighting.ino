@@ -18,8 +18,6 @@ void setup() {
 }
 
 void loop(void) {
-  pagep = page;
-  page[0] = '\0';
   webserver2_loop();
   strip_loop();
   wdt_reset();

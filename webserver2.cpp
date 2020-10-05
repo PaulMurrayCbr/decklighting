@@ -27,6 +27,23 @@ void reply();
 void replyRoom(RoomState &s);
 void replyAll();
 
+int room;
+
+int parseIntArg(char *name) {
+  if (server2.hasArg(name)) {
+    String s = server2.arg(name);
+    return atoi(s.c_str());
+  }
+  else {
+    return 0;
+  }
+}
+
+void parseRoom() {
+  room = parseIntArg("room");
+  if (room < 1 || room > 5) room=0;
+}
+
 void webserver2_setup() {
 
   // Connect to Wi-Fi network with SSID and password
@@ -56,10 +73,7 @@ void webserver2_setup() {
   server2.on("/status", ws2Status);
   server2.on("/on", ws2On);
   server2.on("/off", ws2Off);
-  server2.on("/off", ws2Out);
-  server2.on("/effect", ws2Effect);
-  server2.on("/color", ws2Color);
-  server2.on("/interp", ws2Interp);
+  server2.on("/out", ws2Out);
 
   server2.onNotFound([]() {
     Serial.println("got not found");
@@ -71,6 +85,8 @@ void webserver2_setup() {
 }
 
 void webserver2_loop() {
+  pagep = page;
+  page[0] = '\0';
   server2.handleClient(); // Listen for HTTP requests from clients
 }
 
@@ -86,26 +102,58 @@ void ws2Status() {
 }
 
 void ws2On() {
+  parseRoom();
+
+  if(room==0) {
+    state.allOn = true;
+
+    if(server2.hasArg("brightness")) {
+      state.brightness = parseIntArg("brightness");
+    }
+  }
+  else {
+    RoomState &r = state.room[room-1];    
+
+    r.onOffOut = ON;
+
+    if(server2.hasArg("brightness")) {
+      state.brightness = parseIntArg("brightness");
+      if(state.brightness < 0 || state.brightness > 192) {
+        state.brightness = 64;
+      }
+    }
+    
+  }
+  
+  strip_update();  
   reply();
 }
 
 void ws2Off() {
+  parseRoom();
+
+  if(room==0) {
+    state.allOn = false;
+  }
+  else {
+    RoomState &r = state.room[room-1];    
+    r.onOffOut = OFF;
+  }
+  strip_update();  
   reply();
 }
 
 void ws2Out() {
-  reply();
-}
+  parseRoom();
 
-void ws2Effect() {
-  reply();
-}
-
-void ws2Color() {
-  reply();
-}
-
-void ws2Interp() {
+  if(room==0) {
+    state.allOn = false;
+  }
+  else {
+    RoomState &r = state.room[room-1];    
+    r.onOffOut = OUT;
+  }
+  strip_update();  
   reply();
 }
 
@@ -113,14 +161,12 @@ void reply() {
   server2.sendHeader("Access-Control-Allow-Origin", "*");
   server2.sendHeader("Access-Control-Allow-Method", "GET, POST");
 
-  if (server2.hasArg("room")) {
-    String s = server2.arg("room");
-    int n = atoi(s.c_str());
-    if (n >= 1 && n <= 5) replyRoom(state.room[n-1]);
-    else replyAll();
+  parseRoom();
+
+  if (room != 0) {
+    replyRoom(state.room[room-1]);
   }
   else {
-nope:
     replyAll();
   }
 }
