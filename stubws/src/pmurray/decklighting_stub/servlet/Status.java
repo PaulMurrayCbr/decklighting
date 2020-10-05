@@ -19,8 +19,14 @@ public class Status extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	Random rnd = new Random();
-	int effectn = 0;
 
+	static String[] st = { "on", "off", "out" };
+	static String[] interp = { "linear", "hueup", "huedown", "huenear", "huefar", "huerbow", "huexrbow" };
+	static String[] effect = { "rainbow", "theatre", "plasma" };
+
+	
+	int effectn = 0;
+	int interpn = 0;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -42,15 +48,12 @@ public class Status extends HttpServlet {
 			sendMaster(w);
 		else {
 			sendRoom(w);
-			if(++effectn>=7) effectn= 0;
+			if(++effectn>=effect.length) effectn= 0;
+			if(++interpn>=interp.length) interpn= 0;
 		}
 		w.flush();
 		w.close();
 	}
-
-	static String[] st = { "on", "off", "out" };
-	static String[] interp = { "linear", "hueup", "huedown", "huenear", "huefar", "huerbow", "huexrbow" };
-	static String[] effect = { "rainbow", "theatre", "plasma" };
 
 	void sendMaster(Writer w) throws IOException {
 		w.write("{ \"status\": \"");
@@ -67,7 +70,7 @@ public class Status extends HttpServlet {
 				+ " \"status\": \"");
 		w.write(st[rnd.nextInt(3)]);
 		w.write("\", \"density\": ");
-		w.write(Integer.toString(rnd.nextInt(10) + 1));
+		w.write(Integer.toString(rnd.nextInt(4)*2 + 1));
 		w.write(",\"c1\": \"#");
 		for (int i = 0; i < 6; i++)
 			w.write(Integer.toHexString(rnd.nextInt(16)));
@@ -75,7 +78,7 @@ public class Status extends HttpServlet {
 		for (int i = 0; i < 6; i++)
 			w.write(Integer.toHexString(rnd.nextInt(16)));
 		w.write("\", \"interp\": \"");
-		w.write(interp[rnd.nextInt(3)]);
+		w.write(interp[interpn]);
 		
 		w.write("\", \"effect\": \"");
 		w.write(effect[effectn]);
