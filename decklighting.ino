@@ -1,5 +1,5 @@
 #include "decklighting.h"
-#include "webserver.h"
+#include "webserver2.h"
 #include "strip.h"
 
 State state;
@@ -13,13 +13,21 @@ void setup() {
 
   Serial.begin(115200);
 
-  webserver_setup();
+    webserver2_setup();
   strip_setup();
 }
 
 void loop(void) {
   pagep = page;
-  webserver_loop();
+  page[0] = '\0';
+  webserver2_loop();
   strip_loop();
   wdt_reset();
+}
+
+char *strcat(char *b, const __FlashStringHelper *P) {
+  char *p = (char *)(void *)P;
+  while (*b) b++;
+  while (*b++ = pgm_read_byte_near(p++));
+  return b - 1;
 }

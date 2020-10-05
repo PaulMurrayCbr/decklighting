@@ -34,13 +34,6 @@ void handleStaticEffect();
 void setupAlternateEffect();
 void handleAlternateEffect();
 
-char *strcat(char *b, const __FlashStringHelper *P) {
-  char *p = (char *)(void *)P;
-  while (*b) b++;
-  while (*b++ = pgm_read_byte_near(p++));
-  return b - 1;
-}
-
 const char _SECTION1[] PROGMEM =
   R"zzzz(<html><head>
   <meta name="viewport" content="width=device-width, initial-scale=1"> 

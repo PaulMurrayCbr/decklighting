@@ -62,4 +62,7 @@ class Strip {
 
 extern State state;
 
+char *strcat(char *b, const __FlashStringHelper *P);
+
+
 #endif
