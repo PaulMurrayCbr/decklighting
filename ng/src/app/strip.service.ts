@@ -113,6 +113,11 @@ export class StripService {
 	  		(data) => { this.data.room[n] = data as Room; });
   }
 
+  bothcolors(n:number, c: String) {
+	  	this.http.get<Room>(this.base+"/on?room="+n+"&c1=%23"+c.substr(1)+"&c2=%23"+c.substr(1)).subscribe(
+	  		(data) => { this.data.room[n] = data as Room; });
+  }
+
   interp(n:number, e: String) {
 	  	this.http.get<Room>(this.base+"/on?room="+n+"&interp="+e).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });

@@ -7,15 +7,15 @@
 		<span class="btn-group col-10">
 			<button type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 0" [ngClass]="{active: tab==0}">Main</button>
-			<button type="button" class="btn btn-sm btn-outline-primary"
+			<button *ngIf="!isOut(1)" type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 1" [ngClass]="{active: tab==1}">Entrance</button>
-			<button type="button" class="btn btn-sm btn-outline-primary"
+			<button *ngIf="!isOut(2)" type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 2" [ngClass]="{active: tab==2}">Game Room</button>
-			<button type="button" class="btn btn-sm btn-outline-primary"
+			<button *ngIf="!isOut(3)" type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 3" [ngClass]="{active: tab==3}">Theatre</button>
-			<button type="button" class="btn btn-sm btn-outline-primary"
+			<button *ngIf="!isOut(4)" type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 4" [ngClass]="{active: tab==4}">Deck</button>
-			<button type="button" class="btn btn-sm btn-outline-primary"
+			<button *ngIf="!isOut(5)" type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 5" [ngClass]="{active: tab==5}">Back Wall</button>
 		</span> <span class="btn-group col-2">
 			<button type="button" class="btn btn-sm btn-dark" (click)="refresh()">&#x27f3;</button>
@@ -112,7 +112,6 @@
 					(click)="out(5)" [ngClass]="{active: isOut(5)}">Out</button>
 			</span>
 		</div>
-		<pre>{{data.master | json}}</pre>
 	</div>
 
 	<div *ngIf="tab!=0">
@@ -164,9 +163,11 @@
 			<div class="row">
 				<span class="col-4">Colour</span> 
   				    <span class="col-2">Primary</span> 
-				    <input (change)="c1change()" class="col-2" type="color" [(ngModel)]="data.room[tab].c1"> 
+				    <input (change)="c1change()" class="col-1" type="color" [(ngModel)]="data.room[tab].c1"> 
 				    <span class="col-2">Secondary</span> 
-				    <input (change)="c2change()" class="col-2" type="color" [(ngModel)]="data.room[tab].c2">
+				    <input (change)="c2change()" class="col-1" type="color" [(ngModel)]="data.room[tab].c2">
+					<button type="button" class="col-2 btn btn-sm btn-outline-primary"
+						(click)="white()" >White</button>
 			</div>
 			<div class="row">
 				<span class="col-4">Interpolation Method</span> <select

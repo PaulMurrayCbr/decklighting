@@ -73,6 +73,7 @@ export class AppComponent {
 		return this.stripService.off(n);
 	}
 	out(n: number) {
+		if(this.tab==n) this.tab = 0;
 		return this.stripService.out(n);
 	}
 	c1change(e: Event) {
@@ -81,6 +82,10 @@ export class AppComponent {
 	c2change(e: Event) {
 		return this.stripService.color2(this.tab, this.data.room[this.tab].c2);
 	}
+	white() {
+		return this.stripService.bothcolors(this.tab, "#FFB090");
+	}
+	
 	interpSelectChange(e: Event) {
 	  return this.stripService.interp(this.tab, this.data.room[this.tab].interp);
 	}
