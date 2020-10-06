@@ -79,10 +79,10 @@ class State {
 
     RoomState room[5] = {
       RoomState( 64, 64, 192),
-      RoomState( 64, 192, 192),
-      RoomState( 64, 192, 64),
+      RoomState( 192, 192, 64),
+      RoomState( 64, 64, 192),
       RoomState(192, 192, 64),
-      RoomState(192, 64, 64)
+      RoomState(64, 64, 192)
     }
     ;
 
@@ -93,13 +93,6 @@ class State {
     {
 
     }
-};
-
-class Strip {
-  public:
-    virtual int getLength() = 0;
-    virtual void clear() = 0;
-    virtual void set(int n, uint32_t c) = 0;
 };
 
 extern State state;
