@@ -104,12 +104,12 @@ export class StripService {
   }
   
   color1(n:number, c: String) {
-	  	this.http.get<Room>(this.base+"/on?room="+n+"&c1="+c.substr(1)).subscribe(
+	  	this.http.get<Room>(this.base+"/on?room="+n+"&c1=%23"+c.substr(1)).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });
   }
   
   color2(n:number, c: String) {
-	  	this.http.get<Room>(this.base+"/on?room="+n+"c2="+c.substr(1)).subscribe(
+	  	this.http.get<Room>(this.base+"/on?room="+n+"&c2=%23"+c.substr(1)).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });
   }
 

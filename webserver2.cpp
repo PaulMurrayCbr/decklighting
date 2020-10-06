@@ -127,8 +127,16 @@ void ws2On() {
       if (server2.arg("effect") == "theatre") r.effect = ALTERNATE;
       if (server2.arg("effect") == "plasma") r.effect = PLASMA;
     }
-    if (server2.hasArg("c1")) r.color1.read(server2.arg("c1"));
-    if (server2.hasArg("c2")) r.color2.read(server2.arg("c2"));
+    if (server2.hasArg("c1")) {
+      Serial.println("got argument c1");
+      Serial.println(server2.arg("c1").c_str());
+      r.color1.read(server2.arg("c1"));
+    }
+    if (server2.hasArg("c2")) {
+      Serial.println("got argument c2");
+      Serial.println(server2.arg("c2").c_str());
+      r.color2.read(server2.arg("c2"));
+    }
     if (server2.hasArg("interp")) {
       if (server2.arg("interp") == "linear") r.interpolation = LINEAR;
       if (server2.arg("interp") == "huenear") r.interpolation = HUENEAR;
