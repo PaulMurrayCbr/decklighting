@@ -162,10 +162,10 @@
 		<!--<div *ngIf="roomTab=='colour'">-->
 			<div class="row">
 				<span class="col-4">Colour</span> 
-  				    <span class="col-2">Primary</span> 
-				    <input (change)="c1change()" class="col-1" type="color" [(ngModel)]="data.room[tab].c1"> 
-				    <span class="col-2">Secondary</span> 
-				    <input (change)="c2change()" class="col-1" type="color" [(ngModel)]="data.room[tab].c2">
+  				    <span class="col-1">Primary</span> 
+				    <input (change)="c1change()" class="col-2" type="color" [(ngModel)]="data.room[tab].c1"> 
+				    <span class="col-1">Secondary</span> 
+				    <input (change)="c2change()" class="col-2" type="color" [(ngModel)]="data.room[tab].c2">
 					<button type="button" class="col-2 btn btn-sm btn-outline-primary"
 						(click)="white()" >White</button>
 			</div>
