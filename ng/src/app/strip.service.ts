@@ -8,6 +8,25 @@ export class Master {
 	brightness: number;
 }
 
+export class EffectRainbow {
+}
+
+export class EffectTheatre {
+}
+
+export class EffectPlasma {
+}
+
+export class EffectBouncyBall {
+	width: number; // width is in pixels
+	speed: number; // speed is in pixels per second
+}
+
+export class EffectFlicker {
+	c1Rate: number; // the probability that over a second, the primary colour will be set
+	c2Rate: number; // the probability that over a second, the primary colour will be set
+}
+
 export class Room {
 	status: String = "";
 	density: number = 1;
@@ -15,6 +34,13 @@ export class Room {
 	c2: String = "";
 	interp: String = "";
 	effect: String = "";
+	effectData: {
+		plasma: EffectPlasma;
+	    bouncyBall: EffectBouncyBall;
+	    flicker: EffectFlicker;
+	    rainbow: EffectRainbow;
+	    theatre: EffectTheatre;
+    }
 }
 
 export class Data {
@@ -99,8 +125,8 @@ export class StripService {
   }
   
   effect(n:number, e: String) {
-	  	this.http.get<Room>(this.base+"/on?room="+n+"&effect="+e).subscribe(
-	  		(data) => { this.data.room[n] = data as Room; });
+//	  	this.http.get<Room>(this.base+"/on?room="+n+"&effect="+e).subscribe(
+//	  		(data) => { this.data.room[n] = data as Room; });
   }
   
   color1(n:number, c: String) {

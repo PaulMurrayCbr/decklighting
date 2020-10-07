@@ -27,6 +27,10 @@ export class AppComponent {
 		new RoomUi(),
 		new RoomUi()
 	];
+	
+	roomasstring() {
+	  return JSON.stringify(this.data.room[this.tab]);
+	}
 	 
 	constructor(private stripService: StripService) {
 		this.data = stripService.data;
@@ -54,6 +58,8 @@ export class AppComponent {
 			this.stripService.refreshRoom(this.tab);
 	}
 	effect(e: String) {
+		this.data.room[this.tab].effect = e;
+	
 		this.stripService.effect(this.tab, e);
 	}
 	

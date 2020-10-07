@@ -4,6 +4,13 @@
 	</div>
 
 	<div class="row">
+		<span class="btn-group col-12">
+			<button type="button" class="btn btn-primary col-12"
+				(click)="allOff()" [ngClass]="{active: data.master.status=='off'}">All
+				Off</button>
+		</span>
+	</div>
+	<div class="row">
 		<span class="btn-group col-10">
 			<button type="button" class="btn btn-sm btn-outline-primary"
 				(click)="tab = 0" [ngClass]="{active: tab==0}">Main</button>
@@ -23,13 +30,6 @@
 	</div>
 
 	<div *ngIf="tab==0">
-		<div class="row">
-			<span class="btn-group col-12">
-				<button type="button" class="btn btn-primary col-12"
-					(click)="allOff()" [ngClass]="{active: data.master.status=='off'}">All
-					Off</button>
-			</span>
-		</div>
 		<div class="row">
 			<span class="btn-group col-12">
 				<button type="button" class="btn btn-sm btn-outline-primary"
@@ -195,9 +195,27 @@
 						[ngClass]="{active: data.room[tab].effect=='theatre'}">Theatre</button>
 					<button type="button" class="btn btn-sm btn-outline-primary"
 						(click)="effect('plasma')"
-						[ngClass]="{active: data.room[tab].effect=='plasma'}">Plasma</button>
+						[ngClass]="{active: data.room[tab].effect=='bouncyball'}">Bouncy Ball</button>
+					<button type="button" class="btn btn-sm btn-outline-primary"
+						(click)="effect('flicker')"
+						[ngClass]="{active: data.room[tab].effect=='flicker'}">Flicker</button>
 				</span>
 			</div>
+
+			<div *ngIf="data.room[tab].effect=='bouncyball'">
+				<div class="row">
+					<span class="col-12">Bouncy Ball controls</span>
+				</div>
+			</div>
+			<div *ngIf="data.room[tab].effect=='flicker'">
+				<div class="row">
+					<span class="col-12">Flicker controls</span>
+				</div>
+			</div>
+
 		<!--</div>-->
+<div class="row"><pre class="col-12">{{data.room[tab]}}</pre></div>
+<div class="row"><pre class="col-12">{{data.room[tab].effect}}</pre></div>
+<div class="row"><pre class="col-12">{{roomasstring()}}</pre></div>
 
 	</div>
