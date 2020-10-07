@@ -188,14 +188,21 @@
 				<span class="col-4">Effect:</span>
 				<span class="btn-group col-8">
 					<button type="button" class="btn btn-sm btn-outline-primary"
+						(click)="effect('onecolor')"
+						[ngClass]="{active: data.room[tab].effect=='onecolor'}">One Color</button>
+						
+					<button type="button" class="btn btn-sm btn-outline-primary"
 						(click)="effect('rainbow')"
 						[ngClass]="{active: data.room[tab].effect=='rainbow'}">Rainbow</button>
+						
 					<button type="button" class="btn btn-sm btn-outline-primary"
 						(click)="effect('theatre')"
 						[ngClass]="{active: data.room[tab].effect=='theatre'}">Theatre</button>
+						
 					<button type="button" class="btn btn-sm btn-outline-primary"
-						(click)="effect('plasma')"
+						(click)="effect('bouncyball')"
 						[ngClass]="{active: data.room[tab].effect=='bouncyball'}">Bouncy Ball</button>
+						
 					<button type="button" class="btn btn-sm btn-outline-primary"
 						(click)="effect('flicker')"
 						[ngClass]="{active: data.room[tab].effect=='flicker'}">Flicker</button>

@@ -123,9 +123,11 @@ void ws2On() {
       r.density = parseIntArg("density");
     }
     if (server2.hasArg("effect")) {
-      if (server2.arg("effect") == "rainbow") r.effect = RAINBOW;
-      if (server2.arg("effect") == "theatre") r.effect = THEATRE;
-      if (server2.arg("effect") == "plasma") r.effect = PLASMA;
+      for(int i = 0; i<effecttypes; i++) {
+        if(server2.arg("effect") == effectlabel[i]) {
+          r.effect = (Effect) i;
+        }
+      }
     }
     if (server2.hasArg("c1")) {
       Serial.println("got argument c1");
@@ -234,15 +236,15 @@ void replyRoom(RoomState &s) {
   }
 
   pagep = strcat(pagep, F("\", \"effect\": \""));
-  switch (s.effect) {
-    case RAINBOW: pagep = strcat(pagep, F("rainbow")); break;
-    case THEATRE: pagep = strcat(pagep, F("theatre")); break;
-    case PLASMA: pagep = strcat(pagep, F("plasma")); break;
-  }
+  pagep = strcat(pagep, effectlabel[s.effect]);
   pagep = strcat(pagep, F("\""));
 
-  pagep = strcat(pagep, F(", \n\t\"effectData\": {}"));
-
+  pagep = strcat(pagep, F(", \n\t\"effectData\": { \n\t\t\""));
+  pagep = strcat(pagep, effectlabel[s.effect]);
+  pagep = strcat(pagep, F("\": "));
+  s.getEffect().serialize();
+  pagep = strcat(pagep, F("}"));
+  
   pagep = strcat(pagep, F("}"));
 
   server2.send(200, "application/json", page);

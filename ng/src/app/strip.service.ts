@@ -125,8 +125,8 @@ export class StripService {
   }
   
   effect(n:number, e: String) {
-//	  	this.http.get<Room>(this.base+"/on?room="+n+"&effect="+e).subscribe(
-//	  		(data) => { this.data.room[n] = data as Room; });
+	  	this.http.get<Room>(this.base+"/on?room="+n+"&effect="+e).subscribe(
+	  		(data) => { this.data.room[n] = data as Room; });
   }
   
   color1(n:number, c: String) {

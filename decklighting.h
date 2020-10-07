@@ -52,8 +52,9 @@ class Strip { // a pure virtual interface
     virtual void set(int n, uint32_t c) = 0;
 };
 
-
-enum Effect { ONECOLOR, RAINBOW, THEATRE, PLASMA, BOUNCYBALL, FLICKER };
+enum Effect { ONECOLOR=0, RAINBOW=1, THEATRE=2, PLASMA=3, BOUNCYBALL=4, FLICKER=5 };
+extern const char *effectlabel[];
+extern const int effecttypes;
 
 // may want a pure virtual: setup, loop, derialise, readparams
 
@@ -66,8 +67,8 @@ class EffectImpl {
     virtual void loadArgs() {}
     virtual void serialize() {
       boppage();
-      strcpy(pagep, "null;");
-      pagep += 5;
+      strcpy(pagep, "null");
+      pagep += 4;
     }
 };
 
