@@ -123,8 +123,8 @@ void ws2On() {
       r.density = parseIntArg("density");
     }
     if (server2.hasArg("effect")) {
-      if (server2.arg("effect") == "rainbow") r.effect = STATIC;
-      if (server2.arg("effect") == "theatre") r.effect = ALTERNATE;
+      if (server2.arg("effect") == "rainbow") r.effect = RAINBOW;
+      if (server2.arg("effect") == "theatre") r.effect = THEATRE;
       if (server2.arg("effect") == "plasma") r.effect = PLASMA;
     }
     if (server2.hasArg("c1")) {
@@ -235,8 +235,8 @@ void replyRoom(RoomState &s) {
 
   pagep = strcat(pagep, F("\", \"effect\": \""));
   switch (s.effect) {
-    case STATIC: pagep = strcat(pagep, F("rainbow")); break;
-    case ALTERNATE: pagep = strcat(pagep, F("theatre")); break;
+    case RAINBOW: pagep = strcat(pagep, F("rainbow")); break;
+    case THEATRE: pagep = strcat(pagep, F("theatre")); break;
     case PLASMA: pagep = strcat(pagep, F("plasma")); break;
   }
   pagep = strcat(pagep, F("\""));
