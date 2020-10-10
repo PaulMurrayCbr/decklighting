@@ -22,6 +22,7 @@ export class EffectPlasma {
 
 export class EffectBouncyBall {
 	width: number = 10; // width is in pixels
+	tail: number = 10; // tail is in pixels
 	speed: number = 500; // speed is in pixels per second
 }
 
@@ -134,7 +135,12 @@ export class StripService {
   }
   
   updateBBall(n: number, v: EffectBouncyBall) {
-	  	this.http.get<Room>(this.base+"/effect/bouncyball?room="+n+"&width="+v.width+"&speed="+v.speed).subscribe(
+	  	this.http.get<Room>(this.base+"/effect?room="+n+"&width="+v.width+"&tail="+v.tail+"&speed="+v.speed).subscribe(
+	  		(data) => { this.data.room[n] = data as Room; });
+  }
+  
+  updateFlicker(n: number, v: EffectFlicker) {
+	  	this.http.get<Room>(this.base+"/effect?room="+n+"&c1Rate="+v.c1Rate+"&c2Rate="+v.c2Rate).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });
   }
   

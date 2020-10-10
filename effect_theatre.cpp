@@ -7,7 +7,7 @@ class TheatreEffect  : public EffectImpl {
     void setup(RoomState &r, Strip &s);
 };
 
-EffectImpl *theatreEffect = new TheatreEffect();
+EffectImpl *newTheatreEffect() { return new TheatreEffect();}
 
 void TheatreEffect::setup(RoomState &room, Strip &strip) {
   const int len = strip.getLength();

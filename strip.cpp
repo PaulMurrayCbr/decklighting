@@ -97,6 +97,17 @@ void strip_setup() {
 }
 
 void strip_loop() {
+  if(state.allOn) {
+    // paint chunks
+    boolean needspaint = false;
+    for (int i = 0; i < CHUNKS; i++) {
+      if (state.room[i].onOffOut == ON) {
+        needspaint = state.room[i].loop(incBlock[i]) || needspaint; // initial paint of the room
+      }
+    }
+    if(needspaint)
+      outputStrip.show();
+  }
 }
 
 void strip_update() {

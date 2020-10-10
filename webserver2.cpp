@@ -22,6 +22,7 @@ void ws2Out();
 void ws2Effect();
 void ws2Color();
 void ws2Interp();
+void ws2EParams();
 
 void reply();
 void replyRoom(RoomState &s);
@@ -74,6 +75,7 @@ void webserver2_setup() {
   server2.on("/on", ws2On);
   server2.on("/off", ws2Off);
   server2.on("/out", ws2Out);
+  server2.on("/effect", ws2EParams);
 
   server2.onNotFound([]() {
     Serial.println("got not found");
@@ -249,4 +251,12 @@ void replyRoom(RoomState &s) {
 
   server2.send(200, "application/json", page);
 
+}
+
+void ws2EParams() {
+  parseRoom();
+  if (room == 0) return;
+  RoomState &r = state.room[room - 1];
+  r.getEffect().loadArgs();
+  reply();
 }

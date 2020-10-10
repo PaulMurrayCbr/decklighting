@@ -184,27 +184,15 @@
 		<!--</div>-->
 		<!--<div *ngIf="roomTab=='effect'">-->
 			<div class="row">
-				<span class="btn-group col-12">
-					<button type="button" class="btn btn-sm btn-outline-primary"
-						(click)="effect('onecolor')"
-						[ngClass]="{active: data.room[tab].effect=='onecolor'}">One Color</button>
-						
-					<button type="button" class="btn btn-sm btn-outline-primary"
-						(click)="effect('rainbow')"
-						[ngClass]="{active: data.room[tab].effect=='rainbow'}">Rainbow</button>
-						
-					<button type="button" class="btn btn-sm btn-outline-primary"
-						(click)="effect('theatre')"
-						[ngClass]="{active: data.room[tab].effect=='theatre'}">Theatre</button>
-						
-					<button type="button" class="btn btn-sm btn-outline-primary"
-						(click)="effect('bouncyball')"
-						[ngClass]="{active: data.room[tab].effect=='bouncyball'}">Bouncy Ball</button>
-						
-					<button type="button" class="btn btn-sm btn-outline-primary"
-						(click)="effect('flicker')"
-						[ngClass]="{active: data.room[tab].effect=='flicker'}">Flicker</button>
-				</span>
+				<span class="col-4">Effect</span> <select
+					(change)="effectSelectChange()" name="effectSelect" class="col-8"
+					[(ngModel)]="data.room[tab].effect">
+					<option value="onecolor">One Colour</option>
+					<option value="rainbow">Rainbow</option>
+					<option value="theatre">Theatre</option>
+					<option value="bouncyball">Comet</option>
+					<option value="flicker">Flicker</option>
+				</select>
 			</div>
 
 			<div *ngIf="data.room[tab].effect=='bouncyball'">
@@ -217,6 +205,11 @@
 					<span class="col-1">{{data.room[tab].effectData.bouncyball.width}}</span>
 				</div>
 				<div class="row">
+					<span class="col-4">Tail</span>
+					<input (change)="bballChange()" class="col-7" type="range" min="0" max="20" [(ngModel)]="data.room[tab].effectData.bouncyball.tail">
+					<span class="col-1">{{data.room[tab].effectData.bouncyball.tail}}</span>
+				</div>
+				<div class="row">
 					<span class="col-4">Speed</span>
 					<input (change)="bballChange()" class="col-7" type="range" min="0" max="1000" [(ngModel)]="data.room[tab].effectData.bouncyball.speed">
 					<span class="col-1">{{speedSeconds(data.room[tab].effectData.bouncyball.speed)}}</span>
@@ -225,6 +218,16 @@
 			<div *ngIf="data.room[tab].effect=='flicker'">
 				<div class="row">
 					<span class="col-12">Flicker controls</span>
+				</div>
+				<div class="row">
+					<span class="col-4">Rate 1</span>
+					<input (change)="flickerChange()" class="col-7" type="range" min="0" max="1000" [(ngModel)]="data.room[tab].effectData.flicker.c1Rate">
+					<span class="col-1">{{data.room[tab].effectData.flicker.c1Rate}}</span>
+				</div>
+				<div class="row">
+					<span class="col-4">Rate 2</span>
+					<input (change)="flickerChange()" class="col-7" type="range" min="0" max="1000" [(ngModel)]="data.room[tab].effectData.flicker.c2Rate">
+					<span class="col-1">{{data.room[tab].effectData.flicker.c2Rate}}</span>
 				</div>
 			</div>
 

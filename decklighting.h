@@ -32,20 +32,25 @@ class RoomState {
 
     int density = 1;
     Effect effect = ONECOLOR;
+    EffectImpl *effectImpl[10];
     Interpolation interpolation = LINEAR;
 
     EffectImpl& getEffect() {
-      return getEffectImpl(effect);
+      return *effectImpl[effect];
     }
 
-    RoomState(int r, int g, int b) : color1(r, g, b), color2(r, g, b) {}
+    RoomState(int r, int g, int b) : color1(r, g, b), color2(r, g, b) {
+      for(int i =0 ;i<effecttypes; i++) {
+        effectImpl[i] = newEffectImpl((Effect)i);
+      }
+    }
 
     void setup(Strip &s) {
       getEffect().setup(*this, s); 
     }
     
-    void loop(Strip &s) {
-      getEffect().loop(*this, s); 
+    boolean loop(Strip &s) {
+      return getEffect().loop(*this, s); 
     }
 
     void loadArgs() {

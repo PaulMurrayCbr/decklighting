@@ -7,7 +7,7 @@ class OneColorEffect : public EffectImpl {
     void setup(RoomState &r, Strip &s);
 };
 
-EffectImpl *oneColorEffect = new OneColorEffect();
+EffectImpl *newOneColorEffect() { return new OneColorEffect();}
 
 void OneColorEffect::setup(RoomState &room, Strip &strip) {
   const int len = strip.getLength();

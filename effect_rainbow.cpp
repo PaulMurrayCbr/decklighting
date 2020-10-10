@@ -9,7 +9,7 @@ class RainbowEffect  : public EffectImpl {
     void setup(RoomState &r, Strip &s);
 };
 
-EffectImpl *rainbowEffect = new RainbowEffect();
+EffectImpl *newRainbowEffect() { return new RainbowEffect();}
 
 inline unsigned lim(double f) {
   if (f >= 255) return 255;

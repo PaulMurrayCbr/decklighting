@@ -11,13 +11,13 @@ extern const int effecttypes;
 class EffectImpl {
   public:
     virtual void setup(RoomState &r, Strip &s) = 0;
-    virtual void loop(RoomState &r, Strip &s) {}
+    virtual boolean loop(RoomState &r, Strip &s) { return false;}
     virtual void loadArgs() {}
     virtual void serialize(); // the default case is defined in the .cpp
 };
 
 
-EffectImpl &getEffectImpl(Effect e);
+EffectImpl *newEffectImpl(Effect e);
 
 
 

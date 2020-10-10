@@ -92,8 +92,11 @@ export class AppComponent {
 		return this.stripService.bothcolors(this.tab, "#FFB090");
 	}
 	
-	interpSelectChange(e: Event) {
+	interpSelectChange() {
 	  return this.stripService.interp(this.tab, this.data.room[this.tab].interp);
+	}
+	effectSelectChange() {
+	  this.stripService.effect(this.tab, this.data.room[this.tab].effect);
 	}
 	isDensity(a: number) {
 	  return this.data.room[this.tab].density == a;
@@ -108,5 +111,8 @@ export class AppComponent {
     
     bballChange() {
 		return this.stripService.updateBBall(this.tab, this.data.room[this.tab].effectData.bouncyball);   	
+    }
+    flickerChange() {
+		return this.stripService.updateFlicker(this.tab, this.data.room[this.tab].effectData.flicker);   	
     }
 }

@@ -7,22 +7,22 @@ const char *effectlabel[] = {"onecolor", "rainbow", "theatre", "plasma", "bouncy
 extern char page[];
 extern char *pagep;
 
-extern EffectImpl *oneColorEffect;
-extern EffectImpl *rainbowEffect;
-extern EffectImpl *theatreEffect;
-extern EffectImpl *plasmaEffect;
-extern EffectImpl *bouncyBallEffect;
-extern EffectImpl *flickerEffect;
+EffectImpl *newOneColorEffect();
+EffectImpl *newRainbowEffect();
+EffectImpl *newTheatreEffect();
+EffectImpl *newPlasmaEffect();
+EffectImpl *newBouncyBallEffect();
+EffectImpl *newFlickerEffect();
 
-EffectImpl &getEffectImpl(Effect e) {
+EffectImpl *newEffectImpl(Effect e) {
   switch (e) {
     default:
-    case ONECOLOR: return *oneColorEffect;
-    case RAINBOW: return *rainbowEffect;
-    case THEATRE: return *theatreEffect;
-    case PLASMA: return *plasmaEffect;
-    case BOUNCYBALL: return *bouncyBallEffect;
-    case FLICKER: return *flickerEffect;
+    case ONECOLOR: return newOneColorEffect();
+    case RAINBOW: return newRainbowEffect();
+    case THEATRE: return newTheatreEffect();
+    case PLASMA: return newPlasmaEffect();
+    case BOUNCYBALL: return newBouncyBallEffect();
+    case FLICKER: return newFlickerEffect();
   }
 }
 
