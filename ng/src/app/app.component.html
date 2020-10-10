@@ -67,9 +67,8 @@
 					(click)="off(1)" [ngClass]="{active: isOff(1)}">Off</button>
 				<button type="button" class="btn btn-sm btn-outline-primary"
 					(click)="on(1)" [ngClass]="{active: isOn(1)}">On</button>
-				<button type="button"
-					class="btn btn-sm btn-outline-primary disabled" (click)="out(1)"
-					[ngClass]="{active: isOut(1)}">Out</button>
+				<button type="button" class="btn btn-sm btn-outline-primary disabled" 
+					(click)="out(1)" [ngClass]="{active: isOut(1)}">Merge</button>
 			</span>
 		</div>
 		<div class="row">
@@ -79,7 +78,7 @@
 				<button type="button" class="btn btn-sm btn-outline-primary"
 					(click)="on(2)" [ngClass]="{active: isOn(2)}">On</button>
 				<button type="button" class="btn btn-sm btn-outline-primary"
-					(click)="out(2)" [ngClass]="{active: isOut(2)}">Out</button>
+					(click)="out(2)" [ngClass]="{active: isOut(2)}">Merge</button>
 			</span>
 		</div>
 		<div class="row">
@@ -89,7 +88,7 @@
 				<button type="button" class="btn btn-sm btn-outline-primary"
 					(click)="on(3)" [ngClass]="{active: isOn(3)}">On</button>
 				<button type="button" class="btn btn-sm btn-outline-primary"
-					(click)="out(3)" [ngClass]="{active: isOut(3)}">Out</button>
+					(click)="out(3)" [ngClass]="{active: isOut(3)}">Merge</button>
 			</span>
 		</div>
 		<div class="row">
@@ -99,7 +98,7 @@
 				<button type="button" class="btn btn-sm btn-outline-primary"
 					(click)="on(4)" [ngClass]="{active: isOn(4)}">On</button>
 				<button type="button" class="btn btn-sm btn-outline-primary"
-					(click)="out(4)" [ngClass]="{active: isOut(4)}">Out</button>
+					(click)="out(4)" [ngClass]="{active: isOut(4)}">Merge</button>
 			</span>
 		</div>
 		<div class="row">
@@ -109,7 +108,7 @@
 				<button type="button" class="btn btn-sm btn-outline-primary"
 					(click)="on(5)" [ngClass]="{active: isOn(5)}">On</button>
 				<button type="button" class="btn btn-sm btn-outline-primary"
-					(click)="out(5)" [ngClass]="{active: isOut(5)}">Out</button>
+					(click)="out(5)" [ngClass]="{active: isOut(5)}">Merge</button>
 			</span>
 		</div>
 	</div>
@@ -138,7 +137,7 @@
 						(click)="on(tab)" [ngClass]="{active: isOn(tab)}">On</button>
 					<button type="button" class="btn btn-sm btn-outline-primary"
 						(click)="out(tab)"
-						[ngClass]="{active: isOut(tab), disabled:tab==1}">Out</button>
+						[ngClass]="{active: isOut(tab), disabled:tab==1}">Merge</button>
 				</span>
 			</div>
 			<div class="row">
@@ -185,8 +184,7 @@
 		<!--</div>-->
 		<!--<div *ngIf="roomTab=='effect'">-->
 			<div class="row">
-				<span class="col-4">Effect:</span>
-				<span class="btn-group col-8">
+				<span class="btn-group col-12">
 					<button type="button" class="btn btn-sm btn-outline-primary"
 						(click)="effect('onecolor')"
 						[ngClass]="{active: data.room[tab].effect=='onecolor'}">One Color</button>
@@ -212,6 +210,16 @@
 			<div *ngIf="data.room[tab].effect=='bouncyball'">
 				<div class="row">
 					<span class="col-12">Bouncy Ball controls</span>
+				</div>
+				<div class="row">
+					<span class="col-4">Width</span>
+					<input (change)="bballChange()" class="col-7" type="range" min="1" max="20" [(ngModel)]="data.room[tab].effectData.bouncyball.width">
+					<span class="col-1">{{data.room[tab].effectData.bouncyball.width}}</span>
+				</div>
+				<div class="row">
+					<span class="col-4">Speed</span>
+					<input (change)="bballChange()" class="col-7" type="range" min="0" max="1000" [(ngModel)]="data.room[tab].effectData.bouncyball.speed">
+					<span class="col-1">{{speedSeconds(data.room[tab].effectData.bouncyball.speed)}}</span>
 				</div>
 			</div>
 			<div *ngIf="data.room[tab].effect=='flicker'">

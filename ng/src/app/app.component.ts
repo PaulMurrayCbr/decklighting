@@ -101,5 +101,12 @@ export class AppComponent {
 	density(a: number) {
 	  return this.stripService.density(this.tab, a);
 	}
-	
+
+    speedSeconds(n :number) {
+      return Math.exp(n/1000 * (Math.log(60)-Math.log(.1)) + Math.log(.1));
+    }	
+    
+    bballChange() {
+		return this.stripService.updateBBall(this.tab, this.data.room[this.tab].effectData.bouncyball);   	
+    }
 }

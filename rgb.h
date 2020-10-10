@@ -1,7 +1,6 @@
 #ifndef RGB_H
 #define RGB_H
 
-
 typedef struct {
     double r;       // a fraction between 0 and 1
     double g;       // a fraction between 0 and 1
@@ -14,7 +13,17 @@ typedef struct {
     double v;       // a fraction between 0 and 1
 } hsv;
 
-static hsv   rgb2hsv(rgb in);
-static rgb   hsv2rgb(hsv in);
+hsv rgb2hsv(rgb in);
+rgb hsv2rgb(hsv in);
+
+class RGB {
+  public:
+    unsigned char r, g, b;
+    RGB(int rr, int gg, int bb) : r(rr), g(gg), b(bb) {}
+    RGB() : RGB(64, 64, 192) { }
+    char *write(char *p);
+    void read(const String &s);
+};
+
 
 #endif

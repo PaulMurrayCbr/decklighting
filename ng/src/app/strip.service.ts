@@ -8,6 +8,9 @@ export class Master {
 	brightness: number;
 }
 
+export class EffectOneColor {
+}
+
 export class EffectRainbow {
 }
 
@@ -18,8 +21,8 @@ export class EffectPlasma {
 }
 
 export class EffectBouncyBall {
-	width: number; // width is in pixels
-	speed: number; // speed is in pixels per second
+	width: number = 10; // width is in pixels
+	speed: number = 500; // speed is in pixels per second
 }
 
 export class EffectFlicker {
@@ -35,8 +38,9 @@ export class Room {
 	interp: String = "";
 	effect: String = "";
 	effectData: {
+		onecolor: EffectOneColor;
 		plasma: EffectPlasma;
-	    bouncyBall: EffectBouncyBall;
+	    bouncyball: EffectBouncyBall;
 	    flicker: EffectFlicker;
 	    rainbow: EffectRainbow;
 	    theatre: EffectTheatre;
@@ -126,6 +130,11 @@ export class StripService {
   
   effect(n:number, e: String) {
 	  	this.http.get<Room>(this.base+"/on?room="+n+"&effect="+e).subscribe(
+	  		(data) => { this.data.room[n] = data as Room; });
+  }
+  
+  updateBBall(n: number, v: EffectBouncyBall) {
+	  	this.http.get<Room>(this.base+"/effect/bouncyball?room="+n+"&width="+v.width+"&speed="+v.speed).subscribe(
 	  		(data) => { this.data.room[n] = data as Room; });
   }
   
