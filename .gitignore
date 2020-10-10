@@ -2,3 +2,4 @@ passwords.c
 .project
 .settings
 .DS_Store
+/passwords.cpp

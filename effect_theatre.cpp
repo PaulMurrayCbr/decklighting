@@ -2,6 +2,13 @@
 #include "decklighting.h"
 #include "strip.h"
 
+class TheatreEffect  : public EffectImpl {
+  public:
+    void setup(RoomState &r, Strip &s);
+};
+
+EffectImpl *theatreEffect = new TheatreEffect();
+
 void TheatreEffect::setup(RoomState &room, Strip &strip) {
   const int len = strip.getLength();
   uint32_t cp[2];

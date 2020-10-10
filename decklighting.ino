@@ -8,9 +8,6 @@ char page[15000];
 char *pagep;
 char msg[130];
 
-const int effecttypes = 6;
-const char *effectlabel[]={"onecolor", "rainbow", "theatre", "plasma", "bouncyball", "flicker"};
-
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 

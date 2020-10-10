@@ -232,7 +232,7 @@ void replyRoom(RoomState &s) {
     case HUENEAR: pagep = strcat(pagep, F("huenear")); break;
     case  HUEFAR: pagep = strcat(pagep, F("huefar")); break;
     case  HUERBOW: pagep = strcat(pagep, F("huerbow")); break;
-    case  HUEXRBOW: pagep = strcat(pagep, F("huexbow")); break;
+    case  HUEXRBOW: pagep = strcat(pagep, F("huexrbow")); break;
   }
 
   pagep = strcat(pagep, F("\", \"effect\": \""));

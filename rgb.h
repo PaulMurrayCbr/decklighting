@@ -23,6 +23,10 @@ class RGB {
     RGB() : RGB(64, 64, 192) { }
     char *write(char *p);
     void read(const String &s);
+    rgb torgb() {
+      rgb out = {r,g,b};
+      return out;
+    }
 };
 
 
