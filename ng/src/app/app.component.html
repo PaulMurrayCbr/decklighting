@@ -201,12 +201,12 @@
 				</div>
 				<div class="row">
 					<span class="col-4">Head</span>
-					<input (change)="bballChange()" class="col-7" type="range" min="1" max="20" [(ngModel)]="data.room[tab].effectData.bouncyball.head">
+					<input (change)="bballChange()" class="col-7" type="range" min="0" max="50" [(ngModel)]="data.room[tab].effectData.bouncyball.head">
 					<span class="col-1">{{data.room[tab].effectData.bouncyball.head}}</span>
 				</div>
 				<div class="row">
 					<span class="col-4">Tail</span>
-					<input (change)="bballChange()" class="col-7" type="range" min="0" max="20" [(ngModel)]="data.room[tab].effectData.bouncyball.tail">
+					<input (change)="bballChange()" class="col-7" type="range" min="0" max="50" [(ngModel)]="data.room[tab].effectData.bouncyball.tail">
 					<span class="col-1">{{data.room[tab].effectData.bouncyball.tail}}</span>
 				</div>
 				<div class="row">
