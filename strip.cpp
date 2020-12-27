@@ -105,8 +105,9 @@ void strip_loop() {
         needspaint = state.room[i].loop(incBlock[i]) || needspaint; // initial paint of the room
       }
     }
-    if(needspaint)
+    if(needspaint) {
       outputStrip.show();
+    }
   }
 }
 
