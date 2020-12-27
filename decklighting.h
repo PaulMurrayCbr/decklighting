@@ -64,8 +64,10 @@ class RoomState {
 
 class State {
   public:
+    // change this every time the structure of this class is changed.
+    static const byte VERSION = 1;
+    
     unsigned char brightness = 128;
-
     boolean allOn = true;
 
     RoomState room[5] = {

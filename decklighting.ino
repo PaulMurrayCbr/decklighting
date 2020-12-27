@@ -1,6 +1,7 @@
 #include "decklighting.h"
 #include "webserver2.h"
 #include "strip.h"
+#include "persist.h"
 
 State state;
 
@@ -13,11 +14,13 @@ void setup() {
 
   Serial.begin(115200);
 
-    webserver2_setup();
+  persist_setup();
+  webserver2_setup();
   strip_setup();
 }
 
 void loop(void) {
+  persist_loop();
   webserver2_loop();
   strip_loop();
   wdt_reset();

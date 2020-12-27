@@ -10,6 +10,7 @@
 #include "passwords.h"
 #include "favicon.h"
 #include "strip.h"
+#include "persist.h"
 
 ESP8266WebServer server2(80); // Create a webserver object that listens for HTTP request on port 80
 
@@ -48,6 +49,7 @@ void parseRoom() {
 void webserver2_setup() {
 
   // Connect to Wi-Fi network with SSID and password
+  Serial.print("Setting up WiFi.");
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
@@ -104,6 +106,7 @@ void ws2Status() {
 }
 
 void ws2On() {
+  configDirty();
   parseRoom();
 
   if (room == 0) {
@@ -158,6 +161,7 @@ void ws2On() {
 }
 
 void ws2Off() {
+  configDirty();
   parseRoom();
 
   if (room == 0) {
@@ -172,6 +176,7 @@ void ws2Off() {
 }
 
 void ws2Out() {
+  configDirty();
   parseRoom();
 
   if (room == 0) {
@@ -254,6 +259,7 @@ void replyRoom(RoomState &s) {
 }
 
 void ws2EParams() {
+  configDirty();
   parseRoom();
   if (room == 0) return;
   RoomState &r = state.room[room - 1];
