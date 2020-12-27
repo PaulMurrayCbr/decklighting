@@ -14,6 +14,8 @@ void setup() {
 
   Serial.begin(115200);
 
+  Serial.println();
+  Serial.println();
   persist_setup();
   webserver2_setup();
   strip_setup();
