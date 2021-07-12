@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "effect.h"
+#include "config.h"
 
 const int effecttypes = 6;
 const char *effectlabel[] = {"onecolor", "rainbow", "theatre", "plasma", "bouncyball", "flicker"};
@@ -30,4 +31,9 @@ void EffectImpl::serialize() {
   while (*pagep) pagep++;
   strcpy(pagep, "null");
   pagep += 4;
+}
+
+
+void EffectImpl::resetConfig(union ConfigUnion &config) {
+  memset(&config, 0, sizeof(union ConfigUnion));
 }

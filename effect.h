@@ -1,6 +1,8 @@
 #ifndef EFFECT_H
 #define EFFECT_H
 
+#include "config.h"
+
 class RoomState;
 class Strip;
 
@@ -14,11 +16,16 @@ class EffectImpl {
     virtual boolean loop(RoomState &r, Strip &s) { return false;}
     virtual void loadArgs() {}
     virtual void serialize(); // the default case is defined in the .cpp
+
+    // user has selected a different effect. reset the config to sensible values
+    // default is memset(0)
+    virtual void resetConfig(union ConfigUnion &cfg);
+    // we have restarted from a reset. Reload the old config.
+    virtual void reloadConfig(union ConfigUnion &cfg) {}
 };
 
 
 EffectImpl *newEffectImpl(Effect e);
-
 
 
 #endif
