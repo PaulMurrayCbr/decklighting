@@ -4,6 +4,7 @@
 #include "rgb.h"
 #include "interpolation.h"
 #include "effect.h"
+#include "config.h"
 
 extern char page[];
 extern char *pagep;
@@ -34,6 +35,7 @@ class RoomState {
     Effect effect = ONECOLOR;
     EffectImpl *effectImpl[10];
     Interpolation interpolation = LINEAR;
+    ConfigUnion config;
 
     EffectImpl& getEffect() {
       return *effectImpl[effect];
@@ -65,7 +67,7 @@ class RoomState {
 class State {
   public:
     // change this every time the structure of this class is changed.
-    static const byte VERSION = 1;
+    static const byte VERSION = 2;
     
     unsigned char brightness = 128;
     boolean allOn = true;
