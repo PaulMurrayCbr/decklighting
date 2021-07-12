@@ -130,7 +130,11 @@ void ws2On() {
     if (server2.hasArg("effect")) {
       for(int i = 0; i<effecttypes; i++) {
         if(server2.arg("effect") == effectlabel[i]) {
-          r.effect = (Effect) i;
+          if(r.effect != (Effect)i) {
+            r.effect = (Effect) i;
+            r.getEffect().resetConfig(r.config);
+          }
+          break;
         }
       }
     }

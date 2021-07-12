@@ -16,8 +16,18 @@ void persist_setup() {
   Serial.print("EEPROM length ");  
   Serial.println(EEPROM.length());  
   byte v = EEPROM.read(0);
-  if(v != State::VERSION) return;
-  EEPROM.get(1, state);
+  if(v != State::VERSION) {
+    for(int i = 0; i<sizeof(state.room)/sizeof(*state.room); i++) {
+      state.room[i].getEffect().resetConfig(state.room[i].config);
+    }
+  }
+  else {
+    EEPROM.get(1, state);
+    for(int i = 0; i<sizeof(state.room)/sizeof(*state.room); i++) {
+      state.room[i].getEffect().reloadConfig(state.room[i].config);
+    }
+  }
+  
 }
 
 void persist_loop() {
