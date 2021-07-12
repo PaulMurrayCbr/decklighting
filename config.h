@@ -24,7 +24,10 @@ struct BouncyballConfig {
     long speed;
 };
 
-struct FlickerConfig {};
+struct FlickerConfig {
+    int c1Rate;
+    int c2Rate;
+};
 
 union ConfigUnion {
   struct OnecolorConfig oneColor;

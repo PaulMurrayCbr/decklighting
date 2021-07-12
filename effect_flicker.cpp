@@ -5,18 +5,19 @@
 #include "rgb.h"
 
 class FlickerEffect  : public EffectImpl {
-    int c1Rate=0;
-    int c2Rate=0;
     uint32_t lastUpdate;
 
     double avgdurationms1=100;
     double avgdurationms2=100;
+    void recalcDerivedValues(union ConfigUnion &cfg);
     
   public:
     void setup(RoomState &r, Strip &s);
     boolean loop(RoomState &r, Strip &s);
     void loadArgs(RoomState &r);
     void serialize(union ConfigUnion &cfg);
+    void resetConfig(union ConfigUnion &cfg);
+    void reloadConfig(union ConfigUnion &cfg);
 };
 
 EffectImpl *newFlickerEffect() { return new FlickerEffect();}
@@ -56,27 +57,41 @@ boolean FlickerEffect::loop(RoomState &r, Strip &s) {
   return needupdate;
 }
 
+void FlickerEffect::recalcDerivedValues(union ConfigUnion &cfg) {
+    avgdurationms1 = exp(log(100) + (log(60000.0)-log(100))*(cfg.flicker.c1Rate/1000.0));
+    avgdurationms2 = exp(log(100) + (log(60000.0)-log(100))*(cfg.flicker.c2Rate/1000.0));
+}
+
+void FlickerEffect::resetConfig(union ConfigUnion &cfg) {
+  EffectImpl::resetConfig(cfg);
+  recalcDerivedValues(cfg);
+}
+
+void FlickerEffect::reloadConfig(union ConfigUnion &cfg) {
+  EffectImpl::reloadConfig(cfg);
+  recalcDerivedValues(cfg);
+}
+
+
 void FlickerEffect::loadArgs(RoomState &r) {
     if (server2.hasArg("c1Rate")) {
-      c1Rate = atoi(server2.arg("c1Rate").c_str());
+      r.config.flicker.c1Rate = atoi(server2.arg("c1Rate").c_str());
     }
     if (server2.hasArg("c2Rate")) {
-      c2Rate = atoi(server2.arg("c2Rate").c_str());
+      r.config.flicker.c2Rate = atoi(server2.arg("c2Rate").c_str());
     }
-
-    avgdurationms1 = exp(log(100) + (log(60000.0)-log(100))*(c1Rate/1000.0));
-    avgdurationms2 = exp(log(100) + (log(60000.0)-log(100))*(c2Rate/1000.0));
+    recalcDerivedValues(r.config);
 }
 
 void FlickerEffect::serialize(union ConfigUnion &cfg) {
   boppage();
   pagep = strcat(pagep, F("{"));
   pagep = pagep = strcat(pagep, F("\n\t\t\t\"c1Rate\": "));
-  itoa(c1Rate, pagep, 10);
+  itoa(cfg.flicker.c1Rate, pagep, 10);
   boppage();
   pagep = strcat(pagep, F(","));
   pagep = pagep = strcat(pagep, F("\n\t\t\t\"c2Rate\": "));
-  itoa(c2Rate, pagep, 10);
+  itoa(cfg.flicker.c2Rate, pagep, 10);
   boppage();
   pagep = strcat(pagep, F("}"));
 }
