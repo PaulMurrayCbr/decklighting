@@ -14,7 +14,7 @@ class EffectImpl {
   public:
     virtual void setup(RoomState &r, Strip &s) = 0;
     virtual boolean loop(RoomState &r, Strip &s) { return false;}
-    virtual void loadArgs() {}
+    virtual void loadArgs(RoomState &r) {}
     virtual void serialize(); // the default case is defined in the .cpp
 
     // user has selected a different effect. reset the config to sensible values

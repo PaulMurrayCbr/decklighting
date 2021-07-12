@@ -15,7 +15,7 @@ class FlickerEffect  : public EffectImpl {
   public:
     void setup(RoomState &r, Strip &s);
     boolean loop(RoomState &r, Strip &s);
-    void loadArgs();
+    void loadArgs(RoomState &r);
     void serialize();
 };
 
@@ -56,7 +56,7 @@ boolean FlickerEffect::loop(RoomState &r, Strip &s) {
   return needupdate;
 }
 
-void FlickerEffect::loadArgs() {
+void FlickerEffect::loadArgs(RoomState &r) {
     if (server2.hasArg("c1Rate")) {
       c1Rate = atoi(server2.arg("c1Rate").c_str());
     }

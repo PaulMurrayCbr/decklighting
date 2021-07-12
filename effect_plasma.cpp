@@ -6,7 +6,7 @@ class PlasmaEffect  : public EffectImpl {
   public:
     void setup(RoomState &r, Strip &s);
     boolean loop(RoomState &r, Strip &s);
-    void loadArgs();
+    void loadArgs(RoomState &r);
     void serialize();
 };
 
@@ -20,7 +20,7 @@ boolean PlasmaEffect::loop (RoomState &r, Strip &s) {
   return false;
 }
 
-void PlasmaEffect::loadArgs() {
+void PlasmaEffect::loadArgs(RoomState &r) {
   
 }
 

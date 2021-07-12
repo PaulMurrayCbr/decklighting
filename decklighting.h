@@ -56,7 +56,7 @@ class RoomState {
     }
 
     void loadArgs() {
-      getEffect().loadArgs();
+      getEffect().loadArgs(*this);
     }
 
     void serialize() {

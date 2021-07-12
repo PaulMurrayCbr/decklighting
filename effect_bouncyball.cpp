@@ -7,6 +7,7 @@ class BouncyBallEffect  : public EffectImpl {
     int head;
     int tail;
     long speed;
+    
     double speedPerMs;
     double location = 0;
     boolean needToWriteTail = true;
@@ -26,11 +27,12 @@ class BouncyBallEffect  : public EffectImpl {
     }
 
     void writeTail(RoomState &r);
+    void recalcDerivedValues();
 
   public:
     void setup(RoomState &r, Strip &s);
     boolean loop(RoomState &r, Strip &s);
-    void loadArgs();
+    void loadArgs(RoomState &r);
     void serialize();
 };
 
@@ -91,7 +93,16 @@ boolean BouncyBallEffect::loop(RoomState &r, Strip &s) {
   return true;
 }
 
-void BouncyBallEffect::loadArgs() {
+void BouncyBallEffect::recalcDerivedValues() {
+  speedPerMs = exp( log(minspeed) + (log(maxspeed) - log(minspeed)) * (speed / 1000.0));
+
+  if (tail < 0) tail = 0;
+  if (tail > 50) tail = 50;
+
+  needToWriteTail = true;
+}
+
+void BouncyBallEffect::loadArgs(RoomState &r) {
   if (server2.hasArg("head")) {
     head = atoi(server2.arg("head").c_str());
   }
@@ -102,12 +113,7 @@ void BouncyBallEffect::loadArgs() {
     speed = atol(server2.arg("speed").c_str());
   }
 
-  speedPerMs = exp( log(minspeed) + (log(maxspeed) - log(minspeed)) * (speed / 1000.0));
-
-  if (tail < 0) tail = 0;
-  if (tail > 50) tail = 50;
-
-  needToWriteTail = true;
+  recalcDerivedValues();
 }
 
 void BouncyBallEffect::serialize() {

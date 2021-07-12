@@ -267,6 +267,6 @@ void ws2EParams() {
   parseRoom();
   if (room == 0) return;
   RoomState &r = state.room[room - 1];
-  r.getEffect().loadArgs();
+  r.loadArgs();
   reply();
 }
