@@ -253,7 +253,7 @@ void replyRoom(RoomState &s) {
   pagep = strcat(pagep, F(", \n\t\"effectData\": { \n\t\t\""));
   pagep = strcat(pagep, effectlabel[s.effect]);
   pagep = strcat(pagep, F("\": "));
-  s.getEffect().serialize();
+  s.serialize();
   pagep = strcat(pagep, F("}"));
   
   pagep = strcat(pagep, F("}"));

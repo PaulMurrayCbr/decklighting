@@ -16,7 +16,7 @@ class FlickerEffect  : public EffectImpl {
     void setup(RoomState &r, Strip &s);
     boolean loop(RoomState &r, Strip &s);
     void loadArgs(RoomState &r);
-    void serialize();
+    void serialize(union ConfigUnion &cfg);
 };
 
 EffectImpl *newFlickerEffect() { return new FlickerEffect();}
@@ -68,7 +68,7 @@ void FlickerEffect::loadArgs(RoomState &r) {
     avgdurationms2 = exp(log(100) + (log(60000.0)-log(100))*(c2Rate/1000.0));
 }
 
-void FlickerEffect::serialize() {
+void FlickerEffect::serialize(union ConfigUnion &cfg) {
   boppage();
   pagep = strcat(pagep, F("{"));
   pagep = pagep = strcat(pagep, F("\n\t\t\t\"c1Rate\": "));

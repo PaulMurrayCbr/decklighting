@@ -7,7 +7,7 @@ class PlasmaEffect  : public EffectImpl {
     void setup(RoomState &r, Strip &s);
     boolean loop(RoomState &r, Strip &s);
     void loadArgs(RoomState &r);
-    void serialize();
+    void serialize(union ConfigUnion &cfg);
 };
 
 EffectImpl *newPlasmaEffect() { return new PlasmaEffect();}
@@ -24,7 +24,7 @@ void PlasmaEffect::loadArgs(RoomState &r) {
   
 }
 
-void PlasmaEffect::serialize() {
+void PlasmaEffect::serialize(union ConfigUnion &cfg) {
   boppage();
   strcpy(pagep, "{}");
   pagep += 2;

@@ -60,7 +60,7 @@ class RoomState {
     }
 
     void serialize() {
-      getEffect().serialize();
+      getEffect().serialize(config);
     }
 };
 

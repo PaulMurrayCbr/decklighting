@@ -27,7 +27,7 @@ EffectImpl *newEffectImpl(Effect e) {
   }
 }
 
-void EffectImpl::serialize() {
+void EffectImpl::serialize(union ConfigUnion &cfg) {
   while (*pagep) pagep++;
   strcpy(pagep, "null");
   pagep += 4;

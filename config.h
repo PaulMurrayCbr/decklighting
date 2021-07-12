@@ -18,7 +18,11 @@ struct TheatreConfig {};
 
 struct PlasmaConfig {};
 
-struct BouncyballConfig {};
+struct BouncyballConfig {
+    int head;
+    int tail;
+    long speed;
+};
 
 struct FlickerConfig {};
 
